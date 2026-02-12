@@ -13,12 +13,21 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
+            // Основная информация
+
             $table->string('name');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
+            $table->string('login')->unique(); // Добавляем это поле
+            $table->string('phone')->unique(); // Уникальный номер телефона
+            $table->string('email'); // Уникальная почта
+            
+            // Роли: admin, developer, user
+            $table->enum('role', ['admin', 'user'])->default('user');
+            
+            // Пароль и аутентификация
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
+        
         });
     }
 
