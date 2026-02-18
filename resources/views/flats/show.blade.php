@@ -39,7 +39,7 @@
                                 </span>
                             </div>
                         </div>
-<!--  -->
+
 
                         <!-- Основные параметры в список -->
                         <div class="parameters-list mb-4">

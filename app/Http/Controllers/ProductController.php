@@ -13,7 +13,7 @@ class ProductController extends Controller
     {
         $flats = Flat::orderBy('created_at', 'desc')->paginate(12);
         
-        return view('flats', compact('flats'));
+        return view('flats.index', compact('flats'));
     }
 
     public function show($id)
@@ -21,7 +21,7 @@ class ProductController extends Controller
         // Используйте eager loading для фотографий
         $flat = Flat::with('photos')->findOrFail($id);
         
-        return view('flats_show', compact('flat'));
+        return view('flats.show', compact('flat'));
     }
     
     public function storePhoto(Request $request, $id)

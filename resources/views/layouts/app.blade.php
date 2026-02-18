@@ -17,7 +17,7 @@
                 <ul class="navbar-nav">
                 
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('flats') }}">Главная</a>
+                        <a class="nav-link" href="{{ route('flats.index') }}">Главная</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Условия</a>

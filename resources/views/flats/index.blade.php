@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Квартиры в продаже')
+@section('title', 'Жилой комплекс "ESTATE" - квартиры в Казани')
 @section('content')
 <div class="flats-page">
     <!-- Заголовок -->
