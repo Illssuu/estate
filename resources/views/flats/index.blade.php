@@ -2,135 +2,252 @@
 
 @section('title', 'Жилой комплекс "ESTATE" - квартиры в Казани')
 @section('content')
-<div class="flats-page">
-    <!-- Заголовок -->
-    <div class="page-header">
-        <div class="container">
-            <div class="d-flex justify-content-between align-items-center">
-                <h1>Подберём и поможем купить новостройку</h1>
+
+<section class="hero">
+<div class="container">
+    <div class="hero-text">
+        <h1>Жилой комплекс "ESTATE"</h1>
+        <p>Современные квартиры в экологическом районе Казани</p>
+        <a href="#" class="btn primary-btn">Выбрать квартиру</a>
+    </div>
+</div>
+</section>
+
+
+{{-- о комплексе --}}
+<section class="about">
+    <div class="container">
+        <div class="section-header">
+        <h2>О жилом комплексе</h2>
+        <p>Комфорт и качество жизни в каждой детали</p>
+        </div>
+        
+        <div class="about-grid">
+            <div class="about-img">
+                <img src="/imf" alt="жилой комплекс">
             </div>
+        
+            <div class="about-content">
+                <h3>Современный квартал для всей семьи</h3>
+                <p>Жилой комплекс «ESTATE» расположен в одном из самых живописных районов Москвы. Это не просто дом, а целый квартал с собственной инфраструктурой: детский сад, школа, фитнес-центр и зоны отдыха.</p>
+            </div>
+            
+            <ul class="about-stats">
+                <li class="stat-item">
+                    <span class="stat-number">25</span>
+                    <span class="stat-label">этажей</span>
+                </li>
+                <li class="stat-item">
+                    <span class="stat-number">450</span>
+                    <span class="stat-label">квартир</span>
+                </li>
+                <li class="stat-item">
+                    <span class="stat-number">2025</span>
+                    <span class="stat-label">год сдачи</span>
+                </li>
+                <li class="stat-item">
+                    <span class="stat-number">2</span>
+                    <span class="stat-label">минуты до метро</span>
+                </li>
+            </ul>
         </div>
     </div>
+</section>
 
+
+{{-- преимущества --}}
+<section class="advantages">
     <div class="container">
-        <!-- Фильтр -->
-        <div class="filter-section">
-            <h5 class="card-title"> Поиск квартир</h5>
-            <form action="#" method="GET" class="row g-3">
-                <div class="col-md-3">
-                    <label class="form-label">Количество комнат</label>
-                    <select class="form-select" name="rooms">
-                        <option value="">Любое</option>
-                        <option value="1">1 комната</option>
-                        <option value="2">2 комнаты</option>
-                        <option value="3">3 комнаты</option>
-                        <option value="4">4+ комнаты</option>
-                    </select>
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label">Тип жилья</label>
-                    <select class="form-select" name="housing_type">
-                        <option value="">Любой</option>
-                        <option value="new_building">Новостройка</option>
-                        <option value="secondary">Вторичное</option>
-                    </select>
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label">Цена до</label>
-                    <input type="number" class="form-control" name="max_price" placeholder="Макс. цена, руб">
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label">&nbsp;</label>
-                    <button type="submit" class="btn btn-primary w-100">Найти квартиры</button>
-                </div>
-            </form>
+        <div class="section-header">
+            <h2>Наши преимущества</h2>
+            <p>Почему люди выбирают именно нас</p>
         </div>
+        
+        <ul class="advantages-cards">
+            <li class="advantage-card">
+                <h3>Качественная отделка</h3>
+                <p>Квартиры с отделкой от застройщика или под чистовую отделку — выбирайте сами</p>
+            </li>
+            <li class="advantage-card">
+                <h3>Панорамные виды</h3>
+                <p>Живописные виды на парк и город с верхних этажей</p>
+            </li>
+            <li class="advantage-card">
+                <h3>Рядом с метро</h3>
+                <p>7 минут пешком до станции метро </p>
+            </li>
+            <li class="advantage-card">
+                <h3>Инфраструктура</h3>
+                <p>Магазины, аптеки, кафе на первых этажах</p>
+            </li>
+        </ul>
+    </div>
+</section>
 
-        <!-- Список квартир -->
-        @if($flats->count() > 0)
-        <div class="row">
-            @foreach($flats as $flat)
-            <div class="col-lg-4 col-md-6 mb-4">
-                <div class="card h-100 flat-card">
-                    <div class="card-header">
-                        <span class="badge bg-{{ $flat->housing_type == 'new_building' ? 'success' : 'info' }}">
-                            {{ $flat->housing_type_text }}
-                        </span>
-                        <span class="badge bg-warning float-end">{{ $flat->rooms }}-комн.</span>
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">{{ $flat->title }}</h5>
-                        <div class="price-section mb-3">
-                            <h4 class="text-primary">{{ $flat->formatted_price }}</h4>
-                            <div class="text-muted small">
-                                {{ number_format($flat->price / $flat->area, 0, ',', ' ') }} ₽/м²
+
+{{-- каталог квартир --}}
+<section class="catalog" id="catalog">
+<div class="container">
+    <div class="section-header">
+        <h2>Квартиры в продаже</h2>
+        <p>{{$flats->total()}} квартир доступно для бронирования</p>
+    </div>
+
+    {{-- фильтр --}}
+    <div class="filter-setion">
+        <form action="{{ route('flats.index') }}" method="GET" class="filter-form">
+            <div class="filter-grid">
+                <div class="filter-item">
+                    <label for="rooms">Количество комнат</label>
+                    <select name="rooms" id="roooms">
+                     <option value="1" {{ request('rooms') == '1' ? 'selected' : '' }}>1 комната</option>
+                     <option value="2" {{ request('rooms') == '2' ? 'selected' : '' }}>2 комнаты</option>
+                     <option value="3" {{ request('rooms') == '3' ? 'selected' : '' }}>3 комнаты</option>
+                     <option value="4" {{ request('rooms') == '4' ? 'selected' : '' }}>4+ комнаты</option>
+                    </select>
+                </div>
+
+                <div class="filter-item">
+                    <label for="max-price">Цена до, ₽</label>
+                    <input type="number" name="max-price" value="{{ request('max_price')}}">
+                </div>
+                <div class="filter-item">
+                    <label for="min_area">Площадь от, м²</label>
+                    <input type="number" name="min-area" value="{{ request('min_area') }}">
+                </div>
+                <div class="filter-item">
+                    <button type="submit" class="btn form-btn">Показать</button>
+                    <a href="{{ route('flats.index') }}" class="btn btn-outline filter-reset">Сбросить</a>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    {{-- список квартир --}}
+                @if($flats->count() > 0)
+                <div class="flats-grid">
+                    @foreach($flats as $flat)
+                    <div class="flat-card">
+                        <div class="flat-card-header">
+                            <div class="flat-badges">
+                                <span class="badge badge-{{ $flat->housing_type }}">
+                                    {{ $flat->housing_type == 'new_building' ? 'Новостройка' : 'Вторичка' }}
+                                </span>
+                                <span class="badge badge-rooms">{{ $flat->rooms }}-комнатная</span>
                             </div>
+                            @if($flat->balcony)
+                                <span class="badge-feature">Балкон</span>
+                            @endif
                         </div>
                         
-                        <div class="flat-characteristics">
-                            <div class="row">
-                                <div class="col-6">
-                                    <small class="text-muted">Площадь</small>
-                                    <div><strong>{{ $flat->area }} м²</strong></div>
+                        <div class="flat-card-body">
+                            <h3 class="flat-title">{{ $flat->title }}</h3>
+                            
+                            <div class="flat-price">
+                                <span class="price-value">{{ number_format($flat->price, 0, '.', ' ') }} ₽</span>
+                                <span class="price-meter">{{ number_format($flat->price / $flat->area, 0, '.', ' ') }} ₽/м²</span>
+                            </div>
+                            
+                            <div class="flat-specs">
+                                <div class="spec-item">
+                                    <span class="spec-label">Площадь</span>
+                                    <span class="spec-value">{{ $flat->area }} м²</span>
                                 </div>
-                                <div class="col-6">
-                                    <small class="text-muted">Этаж</small>
-                                    <div><strong>{{ $flat->floor }}/{{ $flat->total_floors }}</strong></div>
+                                <div class="spec-item">
+                                    <span class="spec-label">Этаж</span>
+                                    <span class="spec-value">{{ $flat->floor }}/{{ $flat->total_floors }}</span>
+                                </div>
+                                <div class="spec-item">
+                                    <span class="spec-label">Отделка</span>
+                                    <span class="spec-value">
+                                        @if($flat->finishing == 'rough')
+                                            Черновая
+                                        @elseif($flat->finishing == 'fine')
+                                            Чистовая
+                                        @else
+                                            Дизайнерская
+                                        @endif
+                                    </span>
+                                </div>
+                                <div class="spec-item">
+                                    <span class="spec-label">Санузел</span>
+                                    <span class="spec-value">
+                                        {{ $flat->bathroom == 'separate' ? 'Раздельный' : 'Совмещенный' }}
+                                    </span>
                                 </div>
                             </div>
                             
-                            <div class="row mt-2">
-                                <div class="col-6">
-                                    <small class="text-muted">Отделка</small>
-                                    <div><strong>{{ $flat->finishing_text }}</strong></div>
-                                </div>
-                                <div class="col-6">
-                                    <small class="text-muted">Вид</small>
-                                    <div><strong>{{ $flat->view_type_text }}</strong></div>
-                                </div>
-                            </div>
+                            <p class="flat-description">{{ Str::limit($flat->description, 100) }}</p>
                         </div>
-
-                        <p class="card-text mt-3 small text-muted">
-                            {{ Str::limit($flat->description, 120) }}
-                        </p>
-                    </div>
-                    <div class="card-footer">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <a href="{{ route('flats.show', $flat->id) }}" class="btn btn-outline-primary btn-sm">
-                                Подробнее
-                            </a>
-                            <div class="flat-features">
-                                @if($flat->balcony)
-                                    <span class="badge bg-light text-dark" title="Есть балкон">есть балкон</span>
-                                @endif
-                                <span class="badge bg-light text-dark" title="{{ $flat->bathroom_text }} санузел">есть санузел</span>
-                            </div>
+                        
+                        <div class="flat-card-footer">
+                            <a href="{{ route('flats.show', $flat->id) }}" class="btn btn-outline btn-block">Подробнее</a>
                         </div>
                     </div>
+                    @endforeach
                 </div>
-            </div>
-            @endforeach
-        </div>
 
-        <!-- Пагинация -->
-        <div class="row">
-            <div class="col-12">
-                <div class="d-flex justify-content-center">
-                    {{ $flats->links() }}
+                <div class="pagination-wrapper">
+                    {{ $flats->withQueryString()->links() }}
                 </div>
-            </div>
-        </div>
-        @else
-        <div class="row">
-            <div class="col-12">
-                <div class="alert alert-info text-center">
-                    <h4> Квартиры не найдены</h4>
-                    <p>В данный момент нет доступных квартир для продажи.</p>
+                @else
+                <div class="no-results">
+                    <h3>Квартиры не найдены</h3>
+                    <p>Попробуйте изменить результаты поиска</p>
                 </div>
-            </div>
-        </div>
-        @endif
-    </div>
+               @endif
 </div>
+</section>
+
+{{-- контакты --}}
+<section class="contacts">
+    <div class="container">
+                  <div class="contacts-grid">
+                <div class="contacts-info">
+                    <h2 class="section-title">Контакты</h2>
+                    <p class="contacts-text">Приходите в наш офис продаж или свяжитесь с нами любым удобным способом</p>
+                    
+                    <div class="contacts-list">
+                        <div class="contact-item">
+                            <div>
+                                <h4>Адрес офиса продаж</h4>
+                                <p>г. Казань, ул. Строителей, д. 1</p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <div>
+                                <h4>Телефон</h4>
+                                <p><a href="tel:+74951234567">+7 (495) 123-45-67</a></p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <div>
+                                <h4>Email</h4>
+                                <p><a href="mailto:sales@complex.ru">sales@complex.ru</a></p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <div>
+                                <h4>Режим работы</h4>
+                                <p>Пн-Пт: 9:00-20:00, Сб-Вс: 10:00-18:00</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="contacts-map">
+                    <!-- Здесь будет карта (Яндекс/Google) -->
+                    <div class="map-placeholder">
+                        <iframe src="https://yandex.ru/map-widget/v1/?ll=37.617698,55.755864&z=12" width="100%" height="100%" frameborder="0"></iframe>
+                    </div>
+                </div>
+            </div>
+    </div>
+</section>
+
+{{-- тут будет блок с заявкой --}}
+     
 @endsection
