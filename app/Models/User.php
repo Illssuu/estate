@@ -44,4 +44,8 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin'; // предполагая, что у вас есть поле 'role'
+    }
 }

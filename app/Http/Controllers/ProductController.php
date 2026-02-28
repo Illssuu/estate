@@ -9,12 +9,38 @@ use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
-    public function index()
+
+    public function index(Request $request)
     {
-        $flats = Flat::orderBy('created_at', 'desc')->paginate(12);
+        // Начинаем запрос
+        $query = Flat::query();
+        
+        // Фильтр по комнатам
+        if ($request->filled('rooms')) {
+            if ($request->rooms == '4') {
+                $query->where('rooms', '>=', 4);
+            } else {
+                $query->where('rooms', $request->rooms);
+            }
+        }
+        
+        // Фильтр по типу жилья
+        if ($request->filled('housing_type')) {
+            $query->where('housing_type', $request->housing_type);
+        }
+        
+        // Фильтр по цене
+        if ($request->filled('max_price')) {
+            $query->where('price', '<=', $request->max_price);
+        }
+        
+        // Получаем результаты
+        $flats = $query->orderBy('created_at', 'desc')->paginate(12);
         
         return view('flats.index', compact('flats'));
     }
+
+  
 
     public function show($id)
     {

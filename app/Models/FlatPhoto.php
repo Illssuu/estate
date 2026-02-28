@@ -17,32 +17,19 @@ class FlatPhoto extends Model
         'is_main'
     ];
 
-    // Отношение к квартире
+    protected $casts = [
+        'is_main' => 'boolean'
+    ];
+
+    // Отношение к квартире (нужно!)
     public function flat()
     {
         return $this->belongsTo(Flat::class);
     }
 
-    // Получить полный URL изображения
-    public function getFullPathAttribute()
+    // Аксессор для URL (удобно в шаблонах)
+    public function getUrlAttribute()
     {
         return asset('storage/' . $this->image_path);
-    }
-
-    // Получить главное фото квартиры
-    public static function getMainPhoto($flatId)
-    {
-        return self::where('flat_id', $flatId)
-                   ->where('is_main', true)
-                   ->first();
-    }
-
-    // Получить все фото квартиры
-    public static function getAllPhotos($flatId)
-    {
-        return self::where('flat_id', $flatId)
-                   ->orderBy('sort_order')
-                   ->orderBy('created_at')
-                   ->get();
     }
 }
