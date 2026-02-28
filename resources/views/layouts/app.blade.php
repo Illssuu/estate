@@ -12,7 +12,6 @@
         <div class="container">
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
-                
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('flats.index') }}">Главная</a>
                     </li>
@@ -26,33 +25,36 @@
                         <a class="nav-link" href="#">Ход строительства</a>
                     </li>
 
-                @auth
-                    @if(Auth::user()->isAdmin())
+                    @auth
+                        @if(Auth::user()->isAdmin())
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('admin.index') }}">Админ</a>
+                            </li>
+                        @endif
+                        
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('admin.index') }}">Админ</a>
+                            <span class="nav-link">Привет, {{ Auth::user()->name }}!</span>
                         </li>
-                    @endif
-                    
-                    <li class="nav-item">
-                        <span class="nav-link">Привет, {{ Auth::user()->name }}!</span>
-                    </li>
-                    
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Избранные</a>
-                    </li>
-                    
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Мои заявки</a>
-                    </li>
-                    
-                    <li class="nav-item">
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-                             <button type="submit">Выйти</button>
-                        </form>
-                    </li>
-                @endauth
-                
+                        
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Избранные</a>
+                        </li>
+                        
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Мои заявки</a>
+                        </li>
+                        
+                        <li class="nav-item">
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <button type="submit" class="btn btn-link nav-link" style="display: inline; border: none; background: none;">Выйти</button>
+                            </form>
+                        </li>
+                    @else
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('login.show') }}">Войти</a>
+                        </li>
+                    @endauth
                 </ul>
             </div>
         </div>
