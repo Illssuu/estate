@@ -64,67 +64,47 @@ class Flat extends Model
         'reserved' => 'Забронирована',
         'sold' => 'Продана'
     ];
- public function photos()
+
+    // ===== СВЯЗИ =====
+    public function photos()
     {
         return $this->hasMany(FlatPhoto::class)->orderBy('sort_order');
     }
 
-    /**
-     * Главное фото
-     */
     public function mainPhoto()
     {
         return $this->hasOne(FlatPhoto::class)->where('is_main', true);
     }
 
-    /**
-     * Есть ли фотографии у квартиры
-     */
+    // ===== ПРОВЕРКИ =====
     public function hasPhotos()
     {
         return $this->photos()->exists();
     }
 
-    /**
-     * Количество фотографий
-     */
+    // ===== АКСЕССОРЫ ДЛЯ ФОТО =====
+    public function getMainPhotoUrlAttribute()
+    {
+        return $this->mainPhoto?->url ?? asset('images/no-photo.jpg');
+    }
+
+    public function getFirstPhotoUrlAttribute()
+    {
+        $firstPhoto = $this->photos()->first();
+        return $firstPhoto?->url ?? asset('images/no-photo.jpg');
+    }
+
+    public function getAllPhotosUrlsAttribute()
+    {
+        return $this->photos->map(fn($photo) => $photo->url)->toArray();
+    }
+
     public function getPhotosCountAttribute()
     {
         return $this->photos()->count();
     }
 
-    /**
-     * URL главного фото
-     */
-    public function getMainPhotoUrlAttribute()
-    {
-        if ($this->mainPhoto) {
-            return asset('storage/' . $this->mainPhoto->image_path);
-        }
-        
-        // Запасное изображение
-        return asset('images/no-photo.jpg'); // или placeholder
-    }
-
-    /**
-     * URL первой фотографии
-     */
-    public function getFirstPhotoUrlAttribute()
-    {
-        $photo = $this->photos()->first();
-        return $photo ? asset('storage/' . $photo->image_path) : asset('images/no-photo.jpg');
-    }
-
-    /**
-     * Массив URL всех фотографий
-     */
-    public function getAllPhotosUrlsAttribute()
-    {
-        return $this->photos->map(function ($photo) {
-            return asset('storage/' . $photo->image_path);
-        })->toArray();
-    }
-    // Accessors для удобного отображения
+    // ===== АКСЕССОРЫ ДЛЯ ТЕКСТОВ =====
     public function getHousingTypeTextAttribute()
     {
         return self::HOUSING_TYPES[$this->housing_type] ?? $this->housing_type;
@@ -150,9 +130,14 @@ class Flat extends Model
         return self::STATUS_TYPES[$this->status] ?? $this->status;
     }
 
-    // Форматирование цены
+    // ===== АКСЕССОРЫ ДЛЯ ЦЕНЫ =====
     public function getFormattedPriceAttribute()
     {
         return number_format($this->price, 0, ',', ' ') . ' ₽';
+    }
+
+    public function getPricePerMeterAttribute()
+    {
+        return $this->area > 0 ? round($this->price / $this->area) : 0;
     }
 }

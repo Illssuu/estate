@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Мой сайт')</title>
-    <link rel="stylesheet" href="{{asset("css/app.css")}}">
+    <link rel="stylesheet" href="{{asset("css/style.css")}}">
     <style>
 
     </style>
@@ -42,7 +42,7 @@
                             <a href="">Заявки</a>
                         </li> -->
                         <li class="nav-item nav-item_4">
-                            <a href="">Админ</a>
+                            <a href="{{ route('admin.index') }}">Админ</a>
                         </li>
                     @endif
                         <li class="nav-item">
