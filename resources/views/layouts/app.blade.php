@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Мой сайт')</title>
     <link rel="stylesheet" href="{{asset("css/app.css")}}">
-    <style>
-
 </head>
 <body>
     <!-- Header -->
@@ -28,39 +26,33 @@
                         <a class="nav-link" href="#">Ход строительства</a>
                     </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('login.show') }}">Войти</a>
-                    </li>
                 @auth
-                 <!-- Для авторизованных пользователей -->
                     @if(Auth::user()->isAdmin())
-                        <!-- <li class="nav-item nav-item_4">
-                            <a href="">Добавить квартиру</a>
-                        </li>
-                        <li class="nav-item nav-item_4">
-                            <a href="">Заявки</a>
-                        </li> -->
-                        <li class="nav-item nav-item_4">
-                            <a href="{{ route('admin.index') }}">Админ</a>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('admin.index') }}">Админ</a>
                         </li>
                     @endif
-                        <li class="nav-item">
-                            <span>Привет, {{ Auth::user()->name }}!</span>
-                        </li>
-                        <li class="nav-item nav-item_4">
-                                <a href="">Избранные</a>
-                        </li>
-                        <li class="nav-item nav-item_4">
-                                <a href="">Мои заявки</a>
-                        </li>
-                        <li class="nav-item">
-                            <form method="POST" action="" class="inline">
-                                @csrf
-                                <button type="submit">Выйти</button>
-                            </form>
-                        </li>
                     
+                    <li class="nav-item">
+                        <span class="nav-link">Привет, {{ Auth::user()->name }}!</span>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Избранные</a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Мои заявки</a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                             <button type="submit">Выйти</button>
+                        </form>
+                    </li>
                 @endauth
+                
                 </ul>
             </div>
         </div>

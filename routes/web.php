@@ -19,6 +19,7 @@ Route::post('/login',[AuthController::class, 'login'])->name('login');//авто
 
 Route::middleware(['auth'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    
 });
 
 Route::get('/admin', [AuthController::class, 'showAdmin'])
