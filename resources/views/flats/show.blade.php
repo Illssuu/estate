@@ -7,8 +7,7 @@
     <div class="container py-3">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ route('flats') }}">Квартиры</a></li>
-                <li class="breadcrumb-item active" aria-current="page">{{ $flat->title }}</li>
+                <li class="breadcrumb-item"><a href="{{ route('flats.index') }}">Квартиры</a></li>
             </ol>
         </nav>
     </div>
