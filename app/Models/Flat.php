@@ -66,6 +66,14 @@ class Flat extends Model
     ];
 
     // ===== СВЯЗИ =====
+    public function favorites() {
+        return $this->hasMany(Favorite::class);
+    }
+
+    public function applications() {
+        return $this->HasMany(Application::class);
+    }
+
     public function photos()
     {
         return $this->hasMany(FlatPhoto::class)->orderBy('sort_order');
