@@ -33,8 +33,8 @@ Route::middleware(['auth'])->group(function () {
     });
 });
 
-// // Детальная страница квартиры (публичная)
-// Route::get('/flats/{id}', [ProductController::class, 'show'])->name('flats.show');
+// Детальная страница квартиры (публичная)
+Route::get('/flats/{id}', [ProductController::class, 'show'])->name('flats.show');
 
 // // Админка (только для администраторов)
 // Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
