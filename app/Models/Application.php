@@ -29,4 +29,21 @@ class Application extends Model
     public function flats() {
         return $this->BelongsTo(Flat::class);
     }
+
+    public function getStatusTextAttribute() {
+        return match($this->status) {
+            'new' => 'Новая заявка',
+            'processed' => 'Обработана',
+            'called' => 'Перезвонили',
+            default => $this->status
+        };
+    }
+
+    public function getTypeTextAttribute() {
+        return match($this->type) {
+            'call'=> 'Заявка на звонок',
+            'viewing' => 'Запись на просмотр',
+            default => $this->type
+        };
+    }
 }

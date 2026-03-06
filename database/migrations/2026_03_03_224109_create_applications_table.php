@@ -13,6 +13,12 @@ return new class extends Migration
     {
         Schema::create('applications', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('flat_id')->nullable()->constrained()->onDelete('set null');
+            $table->enum('type', ['call', 'viewing']); // звонок или просмотр
+            $table->enum('status', ['new', 'processed', 'called'])->default('new');
+            $table->dateTime('viewing_date')->nullable(); // для записи на просмотр
+            $table->text('comment')->nullable();
             $table->timestamps();
         });
     }
