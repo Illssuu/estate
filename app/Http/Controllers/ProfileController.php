@@ -86,17 +86,16 @@ class ProfileController extends Controller
 
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users, email' . $user->id,
+            'email' => 'required|email|unique:users,email,' . $user->id,
             'phone' => 'nullable|string|max:20'
             ]);
 
-            $user = new User();
             $user->name = $request->name;
             $user->email = $request->email;
             $user->phone = $request->phone;
             $user->save();
 
-            return back()->with('succes', 'Данные профиля успешно обновлены');
+            return back()->with('success', 'Данные профиля успешно обновлены');
     }
 
 
