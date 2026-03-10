@@ -36,9 +36,13 @@
                         </li>
                         
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Избранные</a>
+                            <a class="nav-link" href="{{ route('profile.index') }}">Личный кабинет</a>
                         </li>
                         
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('profile.favorites') }}">Личный кабинет</a>
+                        </li>
+
                         <li class="nav-item">
                             <a class="nav-link" href="#">Мои заявки</a>
                         </li>
