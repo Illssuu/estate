@@ -32,9 +32,11 @@ Route::get('/flats', [ProductController::class, 'index'])->name('flats.index');
 
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
     
+
     // Главная админки
-    Route::get('/', [AdminController::class, 'index'])->name('index');
-    
+  // Главная админки
+  Route::get('/', [AdminController::class, 'index'])->name('index');
+        
     // Управление квартирами
     Route::get('/flats', [AdminController::class, 'flats'])->name('flats');
     
