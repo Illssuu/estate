@@ -8,63 +8,46 @@
 </head>
 <body>
     <!-- Header -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('flats.index') }}">Главная</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Условия</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">О нас</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Ход строительства</a>
-                    </li>
-                    @auth
-                        @if(Auth::user()->isAdmin())
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('admin.index') }}">Админ</a>
-                            </li>
-                        @endif
-                        
-                        <li class="nav-item">
-                            <span class="nav-link">Привет, {{ Auth::user()->name }}!</span>
-                        </li>
-                        
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Избранные</a>
-                        </li>
-                        
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Мои заявки</a>
-                        </li>
-                        
-                        <li class="nav-item">
-                            <form method="POST" action="{{ route('logout') }}">
-                                @csrf
-                                <button type="submit" class="btn btn-link nav-link" style="display: inline; border: none; background: none;">Выйти</button>
-                            </form>
-                        </li>
-                    @else
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('login.show') }}">Войти</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('register.show') }}">Регистрация</a>
-                        </li>
-                    @endauth
-                </ul>
+<nav class="main-nav">
+    <div class="nav-container">
+        <ul class="nav-menu">
+            <!-- Левые пункты меню -->
+            <div class="nav-left">
+                <li><a href="{{ route('flats.index') }}">Главная</a></li>
+                <li><a href="#">Условия</a></li>
+                <li><a href="#">О нас</a></li>
+                <li><a href="#">Ход строительства</a></li>
+                
+                @auth
+                    @if(Auth::user()->isAdmin())
+                        <li><a href="{{ route('admin.index') }}">Админ</a></li>
+                    @endif
+                    
+                    <li><a href="#">Избранные</a></li>
+                    <li><a href="#">Мои заявки</a></li>
+                @endauth
             </div>
-        </div>
-        
-    </nav>
-
+            
+            <!-- Правые пункты (вход/регистрация/профиль) -->
+            <div class="nav-right">
+                @auth
+                    <li><span>Привет, {{ Auth::user()->name }}!</span></li>
+                    <li>
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit">Выйти</button>
+                        </form>
+                    </li>
+                @else
+                    <li><a href="{{ route('login.show') }}">Войти</a></li>
+                    <li><a href="{{ route('register.show') }}">Регистрация</a></li>
+                @endauth
+            </div>
+        </ul>
+    </div>
+</nav>
     <!-- Main Content -->
-    <main class="container mt-4">
+    <main class="container">
         @yield('content')
     </main>
 
