@@ -6,6 +6,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Мой сайт')</title>
     <link rel="stylesheet" href="{{asset("css/app.css")}}">
+        <link rel="stylesheet" href="{{asset("css/profile.css")}}">
+
 </head>
 <body>
     <!-- Header -->
@@ -25,10 +27,6 @@
                     @endif
                      <li class="nav-item">
                             <a class="nav-link" href="{{ route('profile.index') }}">Личный кабинет</a>
-                        </li>
-                        
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('profile.favorites') }}">Личный кабинет</a>
                         </li>
                 @endauth
             </div>

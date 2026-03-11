@@ -58,6 +58,6 @@ class User extends Authenticatable
     }
 
     public function hasFavorite($flatId) {
-        return $this->favorites()->where('flats_id', $flatId)->exists();
+        return $this->favorites()->where('flat_id', $flatId)->exists();
     }
 }

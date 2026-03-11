@@ -101,6 +101,18 @@
                             
                             <div class="flat-card-footer">
                                 <a href="{{ route('flats.show', $flat->id) }}" class="btn btn-outline btn-block">Подробнее</a>
+
+                                   @auth
+            <button class="favorite-btn {{ auth()->user()->favorites->contains($flat->id) ? 'active' : '' }}" 
+                    onclick="toggleFavorite({{ $flat->id }})"
+                    data-flat-id="{{ $flat->id }}">
+                <span class="heart">❤</span>
+            </button>
+        @else
+            <a href="{{ route('login.show') }}" class="favorite-btn login-required" title="Войдите, чтобы добавить в избранное">
+                <span class="heart">❤</span>
+            </a>
+        @endauth
                             </div>
                         </div>
                         @endforeach
@@ -117,4 +129,59 @@
                    @endif
     </div>
     </section> 
+
+    <script>
+function toggleFavorite(flatId) {
+    @auth
+    fetch(`/profile/favorites/toggle/${flatId}`, {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            const btn = document.querySelector(`[data-flat-id="${flatId}"]`);
+            if (data.added) {
+                btn.classList.add('active');
+                // Можно показать уведомление
+                showNotification('Добавлено в избранное');
+            } else {
+                btn.classList.remove('active');
+                showNotification('Удалено из избранного');
+            }
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+    @endauth
+}
+
+// Простое уведомление (опционально)
+function showNotification(message) {
+    const notification = document.createElement('div');
+    notification.className = 'notification';
+    notification.textContent = message;
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: #2c3e50;
+        color: white;
+        padding: 12px 24px;
+        border-radius: 8px;
+        z-index: 9999;
+        animation: slideIn 0.3s ease;
+    `;
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.remove();
+    }, 2000);
+}
+</script>
 @endsection

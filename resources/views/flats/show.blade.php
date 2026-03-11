@@ -25,6 +25,18 @@
                                 <span class="badge bg-{{ $flat->status_color }} fs-6">
                                     {{ $flat->status_text }}
                                 </span>
+
+                                   @auth
+            <button class="favorite-btn {{ auth()->user()->favorites->contains($flat->id) ? 'active' : '' }}" 
+                    onclick="toggleFavorite({{ $flat->id }})"
+                    data-flat-id="{{ $flat->id }}">
+                <span class="heart">❤</span>
+            </button>
+        @else
+            <a href="{{ route('login.show') }}" class="favorite-btn login-required" title="Войдите, чтобы добавить в избранное">
+                <span class="heart">❤</span>
+            </a>
+        @endauth
                             </div>
                         </div>
                         
