@@ -67,13 +67,6 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
   // Главная админки
   Route::get('/', [AdminController::class, 'index'])->name('index');
         
-    // Управление квартирами
-    Route::get('/flats', [AdminController::class, 'flats'])->name('flats');
-    
-    // Управление пользователями
-    Route::get('/users', [AdminController::class, 'users'])->name('users');
-    
-  //  Route::get('/flats/create', [FlatController::class, 'create'])->name('flats.create'); // ЭТОТ НУЖЕН
-  //  Route::post('/flats', [FlatController::class, 'store'])->name('flats.store');
+  Route::resource('flats', FlatController::class);
 
 });

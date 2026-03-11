@@ -84,22 +84,21 @@ body {
     line-height: 1.5;
     background-color: var(--bg-light);
     margin: 0;
+    overflow-x: hidden;
 }
 
 .container {
-    max-width: 1280px;
-    margin: 0 auto;
-    max-width: 1420px;
-    margin: 0 auto;
+ max-width: 1420px;
+ margin: 0 auto;
 }
 
 .section-header {
     text-align: center;
-    margin-bottom: 60px;
+    margin-top: 60px;
 }
 
 .section-header h2 {
-    font-size: 2.5rem;
+    font-size: 54px;
     font-weight: 700;
     color: var(--primary-dark);
     margin-bottom: 16px;
@@ -114,48 +113,13 @@ body {
 }
 
 
-/* Hero секция */
-.hero {
-    min-height: 100vh; /* Фон на весь экран */
-    background: linear-gradient(135deg, rgba(26, 59, 46, 0.95) 0%, rgba(26, 59, 46, 0.85) 100%),
-                url('https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?ixlib=rb-4.0.3') center/cover;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    overflow: hidden;
-
-    
-
-}
-
-.hero-text {
-    max-width: 700px;
-    position: relative;
-    z-index: 2;
-}
-
-.hero-text h1 {
-    font-size: 4rem;
-    font-weight: 800;
-    color: white;
-    line-height: 1.1;
-    margin-bottom: 24px;
-    letter-spacing: -0.02em;
-}
-
-.hero-text p {
-    font-size: 1.4rem;
-    color: var(--text-gray);
-    margin-bottom: 40px;
-}
 
 /* Кнопки */
 .btn {
     display: inline-block;
     padding: 16px 40px;
     border-radius: 50px;
-    font-weight: 600;
+    font-weight: 300;
     font-size: 1rem;
     text-decoration: none;
     transition: var(--transition);
@@ -327,12 +291,264 @@ body {
 }
 
 /* Каталог квартир */
-.catalog {
-    padding: 100px 0;
-    background: white;
-    height: 100vh;  /* Фон на весь экран */
+
+.filter-form{
+    padding-top: 80px;
+}
+.filter-bg {
+    background:   url('/img/bg.jpg') center/cover no-repeat;
+    width: 100vw;  
+    height: 70vh;          /* на всю ширину окна */
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    padding: 40px 0;
+    margin-bottom: 40px;
+    overflow-x: hidden;
+}
+::placeholder {
+    color: var(--primary-dark);
+}
+
+
+
+.filter-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 24px;
+    align-items: end;
+}
+
+.filter-item {
     display: flex;
-    align-items: center; /* Центрируем контент по вертикали */
+    flex-direction: column;
+}
+.filter-item select {
+    /* Убираем стандартную стрелку */
+    appearance: none;}
+
+.filter-item select,
+.filter-item input {
+    padding: 16px 20px 16px 16px;    border: 2px solid #E5E7EB;
+    border-radius: 30px;
+    font-size: 1rem;
+    transition: var(--transition);
+    background: white;
+    color: var(--primary-dark);
+    
+}
+
+.filter-item select:focus,
+.filter-item input:focus {
+    outline: none;
+    border-color: var(--accent-yellow);
+    box-shadow: 0 0 0 4px rgba(255, 217, 102, 0.2);
+}
+
+.form-btn {
+    background: var(--primary-dark);
+    color: white;
+    width: 100%;
+    padding: 14px;
+ 
+}
+
+
+
+.filter-reset {
+    text-align: center;
+    display: inline-block;
+    color: var(--primary-dark);
+    text-decoration: none;
+    background-color: #9d9b9b;
+    padding: 10px 22px;
+}
+.filter-actions {
+    display: flex !important;          
+    gap: 10px;              
+    align-items: center;     
+    width: 100%;
+}
+
+.filter-item:last-child {
+    flex-direction: row; /* меняем column на row */
+    align-items: center;
+    gap: 10px;
+}
+.filter-item:last-child .form-btn,
+.filter-item:last-child .filter-reset {
+    margin-top: 0; /* убираем отступы */
+}
+/* Карточки квартир */
+.flats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 40px;
+    margin-top: 40px;
+}
+
+.flat-card {
+    background: white;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+    border: 1px solid #E5E7EB;
+}
+
+.flat-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--accent-yellow);
+}
+
+.flat-card-header {
+    padding: 20px 24px;
+    background: linear-gradient(135deg, var(--primary-dark), var(--primary-darker));
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.flat-badges {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.badge {
+    padding: 6px 12px;
+    border-radius: 30px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.badge-new_building,
+.badge-rooms {
+    background: var(--accent-yellow);
+    color: var(--primary-dark);
+}
+
+.badge-secondary {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+.badge-feature {
+    background: var(--accent-yellow);
+    color: var(--primary-dark);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.flat-card-body {
+    padding: 24px;
+}
+
+.flat-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--primary-dark);
+    margin-bottom: 16px;
+}
+
+.flat-price {
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #E5E7EB;
+}
+
+.price-value {
+    display: block;
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--primary-dark);
+    line-height: 1.2;
+}
+
+.price-meter {
+    font-size: 0.95rem;
+    color: #666;
+}
+
+.flat-specs {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.spec-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.spec-label {
+    font-size: 0.85rem;
+    color: #666;
+    margin-bottom: 4px;
+}
+
+.spec-value {
+    font-weight: 600;
+    color: var(--primary-dark);
+}
+
+.flat-description {
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.flat-card-footer {
+    padding: 0 24px 24px;
+}
+
+.btn-block {
+    display: block;
+    width: 100%;
+    text-align: center;
+}
+
+/* Пагинация */
+.pagination-wrapper {
+    margin-top: 60px;
+    display: flex;
+    justify-content: center;
+}
+
+.pagination {
+    display: flex;
+    gap: 8px;
+    list-style: none;
+    padding: 0;
+}
+
+.pagination li a,
+.pagination li span {
+    display: block;
+    padding: 10px 16px;
+    border-radius: 12px;
+    background: white;
+    color: var(--primary-dark);
+    text-decoration: none;
+    transition: var(--transition);
+    border: 1px solid #E5E7EB;
+}
+
+.pagination li.active span {
+    background: var(--primary-dark);
+    color: white;
+    border-color: var(--primary-dark);
+}
+
+.pagination li a:hover {
+    background: var(--accent-yellow);
+    border-color: var(--accent-yellow);
 }
 
 /* Контакты */
