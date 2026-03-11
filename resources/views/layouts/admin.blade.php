@@ -17,16 +17,16 @@
             
             <nav class="sidebar-nav">
                 <a href="{{ route('admin.index') }}" class="{{ request()->routeIs('admin.index') ? 'active' : '' }}">
-                    📊 Дашборд
+                     Дашборд
                 </a>
-                <a href="" class="{{ request()->routeIs('admin.flats.*') ? 'active' : '' }}">
-                    🏢 Квартиры
+                <a href="{{ route(('admin.flats.index')) }}" class="{{ request()->routeIs('admin.flats.*') ? 'active' : '' }}">
+                     Квартиры
                 </a>
-                <a href="" class="{{ request()->routeIs('admin.flats.create') ? 'active' : '' }}">
-                    ➕ Добавить квартиру
+                <a href="{{ route('admin.flats.create') }}" class="{{ request()->routeIs('admin.flats.create') ? 'active' : '' }}">
+                     Добавить квартиру
                 </a>
                 <a href="" class="{{ request()->routeIs('admin.users') ? 'active' : '' }}">
-                    👥 Пользователи
+                     Пользователи
                 </a>
                 
                 <div class="sidebar-divider"></div>

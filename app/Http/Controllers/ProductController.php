@@ -33,7 +33,9 @@ class ProductController extends Controller
         if ($request->filled('max_price')) {
             $query->where('price', '<=', $request->max_price);
         }
-        
+        if ($request->has('min_area') && $request->min_area != '') {
+            $query->where('area', '>=', $request->min_area);
+        }
         // Получаем результаты
         $flats = $query->orderBy('created_at', 'desc')->paginate(12);
         
