@@ -8,14 +8,16 @@
     @stack('styles')
 </head>
 <body>
-    <div class="admin-wrapper">
-        <!-- Боковое меню (оно будет на всех страницах админки) -->
-        <div class="admin-sidebar">
+    <div class="admin-wrapper" style="display: flex;">
+                <!-- Боковое меню (оно будет на всех страницах админки) -->
+        <div class="admin-sidebar" style="width: 250px; flex-shrink: 0;">
             <div class="sidebar-header">
                 <h2>Админ-панель</h2>
             </div>
             
             <nav class="sidebar-nav">
+                <a href="{{ route('flats.index') }}">Главная</a>
+
                 <a href="{{ route('admin.index') }}" class="{{ request()->routeIs('admin.index') ? 'active' : '' }}">
                      Дашборд
                 </a>
@@ -36,7 +38,7 @@
         </div>
 
         <!-- Основной контент -->
-        <div class="admin-main">
+        <div class="admin-main" style="flex: 1; padding: 20px;">
             <div class="admin-header">
                 <h1>@yield('header', 'Панель управления')</h1>
                 

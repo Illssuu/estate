@@ -38,13 +38,13 @@
                 @endif
             </td>
             <td>
-                <a href="{{ route('admin.flats.edit', $flat) }}" class="btn-edit">✏️ Редактировать</a>
+                <a href="{{ route('admin.flats.edit', $flat) }}" class="btn-edit"> Редактировать</a>
                 
                 <form action="{{ route('admin.flats.destroy', $flat) }}" method="POST" style="display:inline">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn-delete" onclick="return confirm('Точно удалить эту квартиру?')">
-                        🗑️ Удалить
+                         Удалить
                     </button>
                 </form>
             </td>
