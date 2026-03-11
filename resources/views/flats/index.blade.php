@@ -4,6 +4,7 @@
 @section('content')
 
 <section class="hero">
+
 <div class="container">
     <div class="hero-text">
         <h1>Жилой комплекс "ESTATE"</h1>
