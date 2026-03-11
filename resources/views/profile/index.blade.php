@@ -13,7 +13,6 @@
         <!-- Статистика -->
         <div class="stats-grid mb-5">
             <div class="stat-card">
-                <div class="stat-icon">❤️</div>
                 <div class="stat-content">
                     <span class="stat-number">{{ $favoritesCount }}</span>
                     <span class="stat-label">в избранном</span>
@@ -22,7 +21,6 @@
             </div>
 
             <div class="stat-card">
-                <div class="stat-icon">📞</div>
                 <div class="stat-content">
                     <span class="stat-number">{{ $applicationCount }}</span>
                     <span class="stat-label">заявок</span>
@@ -31,7 +29,6 @@
             </div>
 
             <div class="stat-card">
-                <div class="stat-icon">⚙️</div>
                 <div class="stat-content">
                     <span class="stat-number">Настройки</span>
                     <span class="stat-label">профиля</span>

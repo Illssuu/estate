@@ -17,7 +17,7 @@ class ProfileController extends Controller
 
         $favoritesCount = $user->favorites()->count();
         $applicationCount =$user->applications()->count();
-        $recentApplications = $user->applications()->with('flat')->latest()->take(5)->get();
+        $recentApplications = $user->applications()->with('flats')->latest()->take(5)->get();
         return view ('profile.index', compact('user', 'favoritesCount', 'applicationCount', 'recentApplications'));
     }
 
@@ -29,26 +29,46 @@ class ProfileController extends Controller
         return view('profile.favorites', compact('favorites'));
     }
 
-    public function toggleFavorite(Request $request, $FlatId) {
+  public function toggleFavorite(Request $request, $flatId)
+{
+    try {
         $user = Auth::user();
-
-        if ($user->hasFavorite($FlatId)) {
-            $user->favorites()->detach($FlatId);
+        
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Не авторизован'
+            ], 401);
+        }
+    
+        if ($user->hasFavorite($flatId)) {
+            $user->favorites()->detach($flatId);
             $message = 'Квартира удалена из избранного';
             $added = false;
-        } else  {
+        } else {
             $user->favorites()->attach($flatId);
             $message = 'Квартира добавлена в избранное';
             $added = true;
         }
 
-        return back()->with('success', $message);
+        // ВАЖНО: возвращаем JSON, а не back()
+        return response()->json([
+            'success' => true,
+            'added' => $added,
+            'message' => $message
+        ]);
+        
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => $e->getMessage()
+        ], 500);
     }
-
+}
 
     public function applications() {
         $user = Auth::user();
-        $applications = $user->applications()->with('flat')->latest()->paginate(10);
+        $applications = $user->applications()->with('flats')->latest()->paginate(10);
 
         return view('profile.applications', compact('applications'));
     }
