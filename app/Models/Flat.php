@@ -65,7 +65,53 @@ class Flat extends Model
         'sold' => 'Продана'
     ];
 
-    // Аксессоры для получения текстовых значений
+    // ===== СВЯЗИ =====
+      public function favorites() {
+        return $this->hasMany(Favorite::class);
+    }
+
+    public function applications() {
+        return $this->HasMany(Application::class);
+    }
+    public function photos()
+    {
+        return $this->hasMany(FlatPhoto::class)->orderBy('sort_order');
+    }
+
+    public function mainPhoto()
+    {
+        return $this->hasOne(FlatPhoto::class)->where('is_main', true);
+    }
+
+    // ===== ПРОВЕРКИ =====
+    public function hasPhotos()
+    {
+        return $this->photos()->exists();
+    }
+
+    // ===== АКСЕССОРЫ ДЛЯ ФОТО =====
+    public function getMainPhotoUrlAttribute()
+    {
+        return $this->mainPhoto?->url ?? asset('images/no-photo.jpg');
+    }
+
+    public function getFirstPhotoUrlAttribute()
+    {
+        $firstPhoto = $this->photos()->first();
+        return $firstPhoto?->url ?? asset('images/no-photo.jpg');
+    }
+
+    public function getAllPhotosUrlsAttribute()
+    {
+        return $this->photos->map(fn($photo) => $photo->url)->toArray();
+    }
+
+    public function getPhotosCountAttribute()
+    {
+        return $this->photos()->count();
+    }
+
+    // ===== АКСЕССОРЫ ДЛЯ ТЕКСТОВ =====
     public function getHousingTypeTextAttribute()
     {
         return self::HOUSING_TYPES[$this->housing_type] ?? $this->housing_type;
