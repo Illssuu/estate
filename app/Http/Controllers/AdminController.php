@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Flat;
 use App\Models\User;
+use App\Models\CallRequest; 
 
 class AdminController extends Controller
 {
@@ -19,4 +20,5 @@ class AdminController extends Controller
 
         return view('admin.index', $data);
     }
+    я
 }

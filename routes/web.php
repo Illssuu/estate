@@ -4,7 +4,8 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\FlatController;
-
+use App\Http\Controllers\AboutController;
+use App\Http\Controllers\CallRequestController;
 use Illuminate\Support\Facades\Route;
 
 // Главная страница с квартирами
@@ -46,3 +47,5 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::post('/flats', [FlatController::class, 'store'])->name('flats.store');
 
 });
+Route::get('/about', [AboutController::class, 'index'])->name('about');
+Route::post('/call_request', [CallRequestController::class, 'store'])->name('call_request.store');
