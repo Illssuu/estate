@@ -42,6 +42,15 @@
         </div>
     </div>
 </div>
+<div class="calculator-section">
+    <h2>Рассчитайте ипотеку</h2>
+    @include('partials.calculator', [
+        'calculatorId' => 'main',
+        'minPrice' => 2000000,
+        'maxPrice' => 50000000,
+        'initialPrice' => 10000000
+    ])
+</div>
         {{-- список квартир --}}
                     @if($flats->count() > 0)
                     <div class="flats-grid">
