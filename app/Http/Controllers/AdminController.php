@@ -8,7 +8,7 @@ use App\Models\User;
 use App\Models\CallRequest; 
 use App\Models\Application;
 use App\Models\BuybackRequest;
-use Illuminate\Http\Request; // ← ЭТО ВАЖНО!
+use Illuminate\Http\Request; 
 
 class AdminController extends Controller
 {
@@ -20,17 +20,9 @@ class AdminController extends Controller
             'available_flats' => Flat::where('status', 'available')->count(),
             'sold_flats' => Flat::where('status', 'sold')->count(),
         ];
-
         return view('admin.index', $data);
     }
-
-
-
-
-
-
-////////////////////////
-
+ 
  public function applications(Request $request)
     {
         $status = $request->get('status');
@@ -141,4 +133,32 @@ class AdminController extends Controller
         return redirect()->back()->with('success', 'Заявка на возврат удалена');
     }
     
+
+    // Добавить в AdminController
+
+public function users()
+{
+    $users = User::latest()->paginate(15);
+    return view('admin.users.index', compact('users'));
+}
+// app/Http/Controllers/AdminController.php
+
+public function updateRole(Request $request, User $user)
+{
+    $request->validate([
+        'role' => 'required|in:user,admin'
+    ]);
+    
+    $user->update(['role' => $request->role]);
+    
+    return back()->with('success', 'Роль обновлена');
+}
+// Добавьте этот метод в AdminController
+
+public function destroyUser(User $user)
+{
+    $user->delete();
+    
+    return back()->with('success', 'Пользователь удален');
+}
 }

@@ -63,12 +63,16 @@ Route::get('/flats', [ProductController::class, 'index'])->name('flats.index');
 
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
     
+// routes/web.php
 
-    // Главная админки
-  // Главная админки
+   
   Route::get('/', [AdminController::class, 'index'])->name('index');
         
   Route::resource('flats', FlatController::class);
+  Route::get('/users', [AdminController::class, 'users'])->name('users');
+ // routes/web.php
+ Route::post('/users/{user}/role', [AdminController::class, 'updateRole'])->name('users.update-role');
+ Route::delete('/users/{user}', [AdminController::class, 'destroyUser'])->name('users.destroy');
 
 });
 Route::get('/about', [AboutController::class, 'index'])->name('about');
