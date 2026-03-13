@@ -73,10 +73,7 @@ class Flat extends Model
     public function applications() {
         return $this->HasMany(Application::class);
     }
-    public function photos()
-    {
-        return $this->hasMany(FlatPhoto::class)->orderBy('sort_order');
-    }
+
 
     public function mainPhoto()
     {

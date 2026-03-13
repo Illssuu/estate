@@ -19,7 +19,7 @@
                 <li><a href="{{ route('flats.index') }}">Главная</a></li>
                 <li><a href="#">Условия</a></li>
                 <li><a href="{{ route('about') }}">О нас</a></li>
-                <li><a href="#">Ход строительства</a></li>
+                <li><a href="{{ route('buyback.index') }}">Гарантия</a></li>
                 
                 @auth
                     @if(Auth::user()->isAdmin())

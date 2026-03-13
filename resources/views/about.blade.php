@@ -16,7 +16,7 @@
     }
         body {
         font-family: 'Arimo', sans-serif;
-        background-color: #000000;
+        background-color: #000000ff;
         color: #d9d9d9;
     }
     
@@ -36,7 +36,7 @@
     /* Hero секция */
     .hero-section {
         height: 675px;
-        background-color: #000000;
+        background-color: #000000ff;
         position: relative;
         overflow: hidden;
     }
@@ -55,12 +55,14 @@
     }
     
     .hero-title-line {
+         margin-left: 40px;
         font-size: 60px;
         color: #ffffff;
         line-height: 1.2;
     }
     
     .hero-subtitle {
+         margin-left: 40px;
         font-size: 13px;
         color: #ffffff;
         margin-top: 40px;
@@ -417,16 +419,11 @@ display: none;
 <div class="about-page">
     <!-- Hero секция с портретами академиков -->
     <section class="hero-section">
-        <img class="hero-image" src="https://static.tildacdn.com/tild3261-3339-4662-a461-376533323066/_1.jpg" alt="ЖК Академик">
+         <video class="hero-image" autoplay muted loop playsinline>
+        <source src="{{ asset('videos/main-video.mp4') }}" type="video/mp4">
+        Ваш браузер не поддерживает видео.
+    </video>
         <div class="container hero-content">
-            <h1 class="hero-title">
-                <span class="hero-title-line">Высшая</span><br>
-                <span class="hero-title-line">степень</span><br>
-                <span class="hero-title-line">комфорта</span>
-            </h1>
-            <div class="hero-subtitle">Жилой комплекс премиум-класса</div>
-            
-            
         </div>
     </section>
 
@@ -434,7 +431,7 @@ display: none;
     <section class="about-complex">
         <div class="container">
             <div class="section-label">о комплексе</div>
-            <h2 class="section-title">ЖК Академик — это гармоничное сочетание</h2>
+            <h2 class="section-title">ЖК Поместье — это гармоничное сочетание</h2>
             
             <div class="features-grid">
                 <div class="feature-card"></div>
@@ -529,8 +526,8 @@ display: none;
                     <img src="{{ asset('img/power1.jpg') }}" alt="История" style="width: 100%;">
                 </div>
                 <div>
-                    <p class="power-text">Почему жилой комплекс получил гордое название Академик? Дух места, историческая традиция – вот источники нашего вдохновения. С Казанью связана жизнь большого количества глубочайших умов и талантов. Помнить о них, рассказывать о них детям и внуками – наш долг и наша гордость.</p>
-                    <p class="power-text" style="margin-top: 20px;">Каждому из 9 корпусов мы дали имя одной из ярких личностей, вошедших в историю не только города, но и всей страны. Принципом отбора были обладание званием академика и обязательная связь с нашим городом.</p>
+                    <p class="power-text">Каждый город — это не просто точки на карте, а переплетение судеб великих людей. Казань по праву гордится званием города академиков, где наука и искусство обретали свое бессмертие.<br>Мы не хотели строить просто стены. Мы решили создать пространство, где воздух наполнен духом свершений. Именно поэтому каждый из девяти корпусов нашего жилого комплекса носит имя одного из тех, кто прославил наш край. Это не просто названия на фасадах — это напоминание о том, что гении жили среди нас, ходили по тем же улицам и смотрели на то же небо.</p>
+                    <p class="power-text" style="margin-top: 20px;">«Поместье» — это не только территория комфорта, но и территория памяти. Здесь, среди современных зданий, мы бережно храним имена тех, кем гордится вся страна. Расскажите о них своим детям, чтобы история продолжалась.</p>
                     <img src="{{ asset('img/power2.jpg') }}" alt="История" style="width: 100%; margin-top: 10px;">
                 </div>
             </div>

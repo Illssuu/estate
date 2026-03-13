@@ -48,4 +48,15 @@ class User extends Authenticatable
     {
         return $this->role === 'admin'; // предполагая, что у вас есть поле 'role'
     }
+    public function favorites() {
+        return $this->belongsToMany(Flat::class, 'favorites')->withTimestamps();
+    }
+
+    public function applications() {
+        return $this->HasMany(Application::class);
+    }
+
+    public function hasFavorite($flatId) {
+        return $this->favorites()->where('flat_id', $flatId)->exists();
+    }
 }

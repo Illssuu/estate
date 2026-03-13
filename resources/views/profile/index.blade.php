@@ -50,38 +50,41 @@
                         <div class="application-item">
                             <div class="application-info">
                                 <div class="application-type">
-                                    @if($application->type == 'call')
-                                        <span class="badge bg-primary">📞 Звонок</span>
-                                    @else
-                                        <span class="badge bg-success">👁️ Просмотр</span>
-                                    @endif
                                     <span class="application-date">{{ $application->created_at->format('d.m.Y H:i') }}</span>
                                 </div>
                                 <div class="application-details">
-                                    @if($application->flat)
+                                    @if(isset($application->contract_number)) <!-- Это заявка на возврат -->
+                                        <strong>Запрос на выкуп:</strong> договор №{{ $application->contract_number }}
+                                        
+                                    @elseif($application->flat) <!-- Обычная заявка на квартиру -->
                                         <strong>Квартира:</strong> {{ $application->flat->title }}
+                                        @if($application->viewing_date)
+                                            <div><strong>На просмотр:</strong> {{ $application->viewing_date->format('d.m.Y H:i') }}</div>
+                                        @endif
+                                    @else <!-- Просто звонок -->
+                                        <strong>Звонок</strong>
                                     @endif
-                                    @if($application->viewing_date)
-                                        <div><strong>На просмотр:</strong> {{ $application->viewing_date->format('d.m.Y H:i') }}</div>
-                                    @endif
+                                    
                                     @if($application->comment)
                                         <div class="text-muted small">«{{ $application->comment }}»</div>
                                     @endif
                                 </div>
                             </div>
-                            <div class="application-status">
-                                @switch($application->status)
-                                    @case('new')
-                                        <span class="status status-new">Новая</span>
-                                        @break
-                                    @case('processed')
-                                        <span class="status status-processed">Обработана</span>
-                                        @break
-                                    @case('called')
-                                        <span class="status status-called">Перезвонили</span>
-                                        @break
-                                @endswitch
-                            </div>
+                     <div class="application-status">
+    @switch($application->status)
+        @case('new')
+            <span class="status status-new">Новая</span>
+            @break
+        @case('processed')
+            <span class="status status-processed">Обработана</span>
+            @break
+        @case('called')
+            <span class="status status-called">Перезвонили</span>
+            @break
+        @default
+            <span class="status status-new">{{ $application->status }}</span>
+    @endswitch
+</div>
                         </div>
                     @endforeach
                 </div>
@@ -96,6 +99,7 @@
 </div>
 
 <style>
+/* Все ваши стили остаются без изменений */
 .profile-page {
     padding: 40px 0 60px;
 }
@@ -250,6 +254,27 @@
 .status-called {
     background: #d1e7dd;
     color: #0f5132;
+}
+
+/* Новые статусы для заявок на возврат */
+.status-pending {
+    background: #fff3cd;
+    color: #997404;
+}
+
+.status-verified {
+    background: #d1e7dd;
+    color: #0f5132;
+}
+
+.status-rejected {
+    background: #f8d7da;
+    color: #842029;
+}
+
+.status-completed {
+    background: #cfe2ff;
+    color: #0a58ca;
 }
 
 .empty-state {

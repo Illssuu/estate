@@ -5,7 +5,11 @@
 <h1>Вход</h1>
 <form method="POST" action="{{ route('login') }}">
 @csrf
-
+ @if(session()->has('url.intended'))
+        <input type="hidden" name="intended" value="{{ session('url.intended') }}">
+    @elseif(request()->has('intended'))
+        <input type="hidden" name="intended" value="{{ request()->intended }}">
+    @endif
 <div>
     <label>Логин:</label>
     <input name="login" value="{{ old('login') }}" required>

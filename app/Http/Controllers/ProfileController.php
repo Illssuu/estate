@@ -3,25 +3,53 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\BuybackRequest;
 use App\Models\Application;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
-
-
 class ProfileController extends Controller
 {
-    public function index() {
-        $user = Auth::user();
+    public function index() 
+{
+    $user = Auth::user();
 
-        $favoritesCount = $user->favorites()->count();
-        $applicationCount =$user->applications()->count();
-        $recentApplications = $user->applications()->with('flats')->latest()->take(5)->get();
-        return view ('profile.index', compact('user', 'favoritesCount', 'applicationCount', 'recentApplications'));
-    }
+    $favoritesCount = $user->favorites()->count();
+    
+    // Считаем обычные заявки
+    $regularApplicationsCount = $user->applications()->count();
+    
+    // Считаем заявки на возврат
+    $buybackCount = BuybackRequest::where('user_id', $user->id)->count();
+    
+    // Общее количество заявок
+    $applicationCount = $regularApplicationsCount + $buybackCount;
+    
+    // Получаем обычные заявки
+    $regularApplications = $user->applications()
+        ->with('flat')
+        ->latest()
+        ->get();
+    
+    // Получаем заявки на возврат
+    $buybackRequests = BuybackRequest::where('user_id', $user->id)
+        ->latest()
+        ->get();
+    
+    // Объединяем и сортируем
+    $recentApplications = $regularApplications->concat($buybackRequests)
+        ->sortByDesc('created_at')
+        ->take(5);
+    
+    return view('profile.index', compact(
+        'favoritesCount',
+        'applicationCount',
+        'recentApplications'
+    ));
+}
 
-
+    // остальные методы без изменений...
     public function favorites() {
         $user = Auth::user();
         $favorites = $user->favorites()->paginate(12);
@@ -29,51 +57,72 @@ class ProfileController extends Controller
         return view('profile.favorites', compact('favorites'));
     }
 
-  public function toggleFavorite(Request $request, $flatId)
-{
-    try {
-        $user = Auth::user();
+    public function toggleFavorite(Request $request, $flatId)
+    {
+        try {
+            $user = Auth::user();
+            
+            if (!$user) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Не авторизован'
+                ], 401);
+            }
         
-        if (!$user) {
+            if ($user->hasFavorite($flatId)) {
+                $user->favorites()->detach($flatId);
+                $message = 'Квартира удалена из избранного';
+                $added = false;
+            } else {
+                $user->favorites()->attach($flatId);
+                $message = 'Квартира добавлена в избранное';
+                $added = true;
+            }
+
+            return response()->json([
+                'success' => true,
+                'added' => $added,
+                'message' => $message
+            ]);
+            
+        } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Не авторизован'
-            ], 401);
+                'message' => $e->getMessage()
+            ], 500);
         }
+    }
+
+public function applications(Request $request) 
+{
+    $user = Auth::user();
+
+    $favoritesCount = $user->favorites()->count();
     
-        if ($user->hasFavorite($flatId)) {
-            $user->favorites()->detach($flatId);
-            $message = 'Квартира удалена из избранного';
-            $added = false;
-        } else {
-            $user->favorites()->attach($flatId);
-            $message = 'Квартира добавлена в избранное';
-            $added = true;
-        }
-
-        // ВАЖНО: возвращаем JSON, а не back()
-        return response()->json([
-            'success' => true,
-            'added' => $added,
-            'message' => $message
-        ]);
-        
-    } catch (\Exception $e) {
-        return response()->json([
-            'success' => false,
-            'message' => $e->getMessage()
-        ], 500);
-    }
+    // Получаем обычные заявки
+    $regularApplications = $user->applications()
+        ->with('flat')
+        ->latest()
+        ->get();
+    
+    // Получаем заявки на возврат
+    $buybackRequests = BuybackRequest::where('user_id', $user->id)
+        ->latest()
+        ->get();
+    
+    // Объединяем и сортируем
+    $applications = $regularApplications->concat($buybackRequests)
+        ->sortByDesc('created_at');
+    
+    $applicationCount = $applications->count();
+    
+    // Передаем как $applications (как в шаблоне)
+    return view('profile.applications', compact(
+        'favoritesCount',
+        'applicationCount',
+        'applications'  // ← теперь называется applications
+    ));
 }
-
-    public function applications() {
-        $user = Auth::user();
-        $applications = $user->applications()->with('flats')->latest()->paginate(10);
-
-        return view('profile.applications', compact('applications'));
-    }
-
-
     public function storeApplication(Request $request) {
         $request->validate([
             'type' => 'required|in:call,viewing',
@@ -94,12 +143,10 @@ class ProfileController extends Controller
         return back()->with('success', 'Заявка успешно отправлена!');
     }
 
-
     public function settings() {
         $user = Auth::user();
         return view('profile.settings', compact('user'));
     }
-
 
     public function update(Request $request) {
         $user = Auth::user();
@@ -108,16 +155,15 @@ class ProfileController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $user->id,
             'phone' => 'nullable|string|max:20'
-            ]);
+        ]);
 
-            $user->name = $request->name;
-            $user->email = $request->email;
-            $user->phone = $request->phone;
-            $user->save();
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->phone = $request->phone;
+        $user->save();
 
-            return back()->with('success', 'Данные профиля успешно обновлены');
+        return back()->with('success', 'Данные профиля успешно обновлены');
     }
-
 
     public function updatePassword(Request $request) {
         $request->validate([

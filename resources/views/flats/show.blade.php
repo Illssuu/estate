@@ -21,11 +21,7 @@
                         <!-- Заголовок и статус -->
                         <div class="d-flex justify-content-between align-items-start mb-4">
                             <h1 class="h3 mb-0">{{ $flat->title }}</h1>
-                            <div>
-                                <span class="badge bg-{{ $flat->status_color }} fs-6">
-                                    {{ $flat->status_text }}
-                                </span>
-                            </div>
+
                         </div>
                         
 
@@ -58,7 +54,10 @@
                                             <img src="{{ $image->url }}" 
                                                  class="d-block w-100" 
                                                  alt="{{ $image->image_name ?: $flat->title }}"
-                                                 style="height: 450px; object-fit: cover;">
+                                                 style="height: 450px; object-fit: cover; cursor: pointer;"
+                                                 data-bs-toggle="modal" 
+                                                 data-bs-target="#imageModal"
+                                                 onclick="showFullImage('{{ $image->url }}')">
                                         </div>
                                         @endforeach
                                     </div>
@@ -193,10 +192,20 @@
                             <div>
                                 <h3 class="text-primary mb-0">{{ number_format($flat->price, 0, ',', ' ') }} ₽</h3>
                             </div>
-                            <a href="#" class="favorite-link">
-                                <img src="{{ asset('img/favorites-icon1.svg') }}" 
-                                     alt="В избранное">
-                            </a>
+                           <!-- избранное -->
+@auth
+    <a href="#" class="favorite-link {{ auth()->user()->favorites->contains($flat->id) ? 'active' : '' }}" 
+       onclick="toggleFavorite({{ $flat->id }}); return false;" 
+       data-flat-id="{{ $flat->id }}">
+        <img src="{{ asset('img/favorites-icon1.svg') }}" 
+             alt="В избранное">
+    </a>
+@else 
+    <a href="{{ route('login') }}" class="favorite-link">
+        <img src="{{ asset('img/favorites-icon1.svg') }}" 
+             alt="В избранное">
+    </a>
+@endauth
                         </div>
                         
                         <div class="text-muted small mb-3">
@@ -279,21 +288,13 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title mb-3">Похожие квартиры</h5>
-                        @php
-                            $similarFlats = \App\Models\Flat::where('id', '!=', $flat->id)
-                                ->where('rooms', $flat->rooms)
-                                ->where('is_available', true)
-                                ->limit(3)
-                                ->get();
-                        @endphp
-                        
                         @if($similarFlats->count() > 0)
                             <div class="list-group list-group-flush">
                                 @foreach($similarFlats as $similar)
                                     <a href="{{ route('flats.show', $similar->id) }}" class="list-group-item list-group-item-action">
                                         <div class="d-flex w-100 justify-content-between">
                                             <h6 class="mb-1">{{ $similar->title }}</h6>
-                                            <small>{{ $similar->formatted_price }}</small>
+                                            <small style="white-space: nowrap;">{{ number_format($similar->price, 0, ',', ' ') }} ₽</small>
                                         </div>
                                         <small class="text-muted">
                                             {{ $similar->area }} м², {{ $similar->floor }}/{{ $similar->total_floors }} эт.
@@ -302,116 +303,65 @@
                                 @endforeach
                             </div>
                         @else
-                            <p class="text-muted small">Нет похожих квартир</p>
+                            <p class="text-muted small mb-0">Нет похожих квартир</p>
                         @endif
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- Модальное окно для заказа звонка -->
-<div class="modal fade" id="callRequestModal" tabindex="-1" aria-labelledby="callRequestModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="callRequestModalLabel">
-                    <i class="bi bi-telephone-inbound me-2"></i>
-                    Заказать звонок
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
-            </div>
-            <div class="modal-body">
-                <!-- Форма заказа звонка -->
-                <form id="callRequestForm">
-                    @csrf
-                    <input type="hidden" name="flat_id" value="{{ $flat->id }}">
-                    
-                    <!-- Поле имени -->
-                    <div class="mb-3">
-                        <label for="name" class="form-label">Ваше имя <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="name" name="name" 
-                               placeholder="Введите ваше имя" required>
-                    </div>
-                    
-                    <!-- Поле телефона -->
-                    <div class="mb-3">
-                        <label for="phone" class="form-label">Номер телефона <span class="text-danger">*</span></label>
-                        <input type="tel" class="form-control" id="phone" name="phone" 
-                               placeholder="+7 (___) ___-__-__" required>
-                    </div>
-                    
-                    <!-- Кнопка отправки -->
-                    <button type="submit" class="btn btn-primary w-100 py-2">
-                        <i class="bi bi-telephone me-2"></i>
-                        Заказать звонок
-                    </button>
-                </form>
+
+    <!-- ПРОСТОЕ МОДАЛЬНОЕ ОКНО на весь экран -->
+    <div class="modal fade" id="imageModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-fullscreen">
+            <div class="modal-content bg-dark">
+                <div class="modal-header border-0">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                </div>
+                <div class="modal-body d-flex justify-content-center align-items-center">
+                    <img id="fullscreenImage" src="" class="img-fluid" style="max-height: 90vh;">
+                </div>
             </div>
         </div>
     </div>
+
+    <!-- Модальное окно для заказа звонка (стиль как на странице "Мои заявки") -->
+    <div id="callRequestModal" class="modal" style="display: none;">
+        <div class="modal-content" style="max-width: 500px; margin: auto; background: white; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.2);">
+            <div class="modal-header" style="padding: 20px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center;">
+                <h3 class="modal-title" style="margin: 0; font-size: 18px; color: #333; font-weight: 500;">Новая заявка на звонок</h3>
+                <button type="button" class="modal-close" onclick="closeCallRequestModal()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #999; padding: 0; line-height: 1;">×</button>
+            </div>
+            
+            <form action="{{ route('applications.store') }}" method="POST">
+                @csrf
+                <div class="modal-body" style="padding: 20px;">
+                    <input type="hidden" name="flat_id" value="{{ $flat->id }}">
+                    
+                    <div class="form-group" style="margin-bottom: 15px;">
+                        <label class="form-label" style="display: block; margin-bottom: 5px; font-size: 14px; color: #555;">Ваше имя</label>
+                        <input type="text" name="name" class="form-control" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; box-sizing: border-box;" required>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 15px;">
+                        <label class="form-label" style="display: block; margin-bottom: 5px; font-size: 14px; color: #555;">Номер телефона</label>
+                        <input type="tel" name="phone" class="form-control" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; box-sizing: border-box;" placeholder="+7 (___) ___-__-__" required>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 15px;">
+                        <label class="form-label" style="display: block; margin-bottom: 5px; font-size: 14px; color: #555;">Комментарий (необязательно)</label>
+                        <textarea name="comment" class="form-control" rows="3" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; box-sizing: border-box; resize: vertical;"></textarea>
+                    </div>
+                </div>
+
+                <div class="modal-footer" style="padding: 20px; border-top: 1px solid #eee; display: flex; gap: 10px; justify-content: flex-end;">
+                    <button type="button" class="btn btn-secondary" onclick="closeCallRequestModal()" style="padding: 10px 20px; border: none; border-radius: 6px; font-size: 14px; cursor: pointer; background: #e0e0e0; color: #333;">Отмена</button>
+                    <button type="submit" class="btn btn-primary" style="padding: 10px 20px; border: none; border-radius: 6px; font-size: 14px; cursor: pointer; background: #2c3e50; color: white;">Отправить заявку</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
-
-<style>
-/* Минимальные стили для модального окна */
-#callRequestModal .modal-content {
-    border-radius: 12px;
-    border: none;
-}
-
-#callRequestModal .modal-header {
-    background: #0051ffff;
-    color: white;
-    border-radius: 12px 12px 0 0;
-}
-
-#callRequestModal .modal-header .btn-close {
-    filter: brightness(0) invert(1);
-}
-
-#callRequestModal .btn-primary {
-    border: none;
-}
-
-#callRequestModal .btn-primary:hover {
-
-}
-
-#callRequestModal .form-control:focus {
-    box-shadow: 0 0 0 0.2rem rgba(123, 81, 65, 0.25);
-}
-</style>
-
-<script>
-// Маска для телефона
-document.addEventListener('DOMContentLoaded', function() {
-    const phoneInput = document.getElementById('phone');
-    if (phoneInput) {
-        phoneInput.addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            if (value.length > 0) {
-                if (value.length <= 1) {
-                    value = value.replace(/^(\d)/, '+7 ($1');
-                } else if (value.length <= 4) {
-                    value = value.replace(/^(\d{1})(\d{0,3})/, '+7 ($1) $2');
-                } else if (value.length <= 7) {
-                    value = value.replace(/^(\d{1})(\d{3})(\d{0,3})/, '+7 ($1) $2-$3');
-                } else {
-                    value = value.replace(/^(\d{1})(\d{3})(\d{3})(\d{0,2})/, '+7 ($1) $2-$3-$4');
-                }
-                e.target.value = value;
-            }
-        });
-    }
-});
-
-// Функция для открытия модального окна
-function openCallRequestModal() {
-    const modal = new bootstrap.Modal(document.getElementById('callRequestModal'));
-    modal.show();
-}
-</script>
-</div>
-@endsection
 
 <!-- СТИЛИ CSS -->
 <style>
@@ -503,6 +453,135 @@ function openCallRequestModal() {
 /* Анимация для иконки */
 .toggle-icon {
     transition: transform 0.3s ease;
+}
+
+.favorite-link.active img {
+    filter: brightness(0) saturate(100%) invert(27%) sepia(94%) saturate(3746%) hue-rotate(355deg) brightness(94%) contrast(92%);
+}
+
+/* Стили для модального окна */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: white;
+    width: 90%;
+    max-width: 500px;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+}
+
+.modal-header {
+    padding: 20px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-title {
+    margin: 0;
+    font-size: 18px;
+    color: #333;
+    font-weight: 500;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #999;
+    padding: 0;
+    line-height: 1;
+}
+
+.modal-close:hover {
+    color: #333;
+}
+
+.modal-body {
+    padding: 20px;
+}
+
+.modal-footer {
+    padding: 20px;
+    border-top: 1px solid #eee;
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 14px;
+    color: #555;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: #2c3e50;
+}
+
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-primary {
+    background: #2c3e50;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #1e2b37;
+}
+
+.btn-secondary {
+    background: #e0e0e0;
+    color: #333;
+}
+
+.btn-secondary:hover {
+    background: #d0d0d0;
+}
+
+@media (max-width: 600px) {
+    .modal-footer {
+        flex-direction: column;
+    }
+    
+    .modal-footer .btn {
+        width: 100%;
+    }
 }
 </style>
 
@@ -598,4 +677,27 @@ function togglePriceHistory() {
         toggleBtn.innerHTML = '<span><i class="bi bi-graph-up me-2"></i>Показать историю цен</span><i class="bi bi-chevron-down toggle-icon"></i>';
     }
 }
+
+// Функция для открытия модального окна
+function openCallRequestModal() {
+    document.getElementById('callRequestModal').style.display = 'flex';
+}
+
+function closeCallRequestModal() {
+    document.getElementById('callRequestModal').style.display = 'none';
+}
+
+// Функция для показа картинки на весь экран
+function showFullImage(imageUrl) {
+    document.getElementById('fullscreenImage').src = imageUrl;
+}
+
+// Закрытие модального окна при клике вне его
+window.onclick = function(event) {
+    const modal = document.getElementById('callRequestModal');
+    if (event.target == modal) {
+        modal.style.display = 'none';
+    }
+}
 </script>
+@endsection

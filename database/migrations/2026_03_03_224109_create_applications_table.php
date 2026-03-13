@@ -6,27 +6,22 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function up()
     {
         Schema::create('applications', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('flat_id')->nullable()->constrained()->onDelete('set null');
-            $table->enum('type', ['call', 'viewing']); // звонок или просмотр
-            $table->enum('status', ['new', 'processed', 'called'])->default('new');
-            $table->dateTime('viewing_date')->nullable(); // для записи на просмотр
+            $table->string('name');
+            $table->string('phone');
+            $table->foreignId('flat_id')->constrained()->onDelete('cascade')->nullable();
+            $table->string('flat_title');
+            $table->foreignId('user_id')->nullable()->constrained()->onDelete('set null');
             $table->text('comment')->nullable();
+            $table->enum('status', ['new', 'processed', 'cancelled'])->default('new');
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         Schema::dropIfExists('applications');
     }

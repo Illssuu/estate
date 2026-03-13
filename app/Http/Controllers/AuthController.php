@@ -47,7 +47,11 @@ class AuthController extends Controller
     }
 
     // Показать форму входа
-    public function showLogin(){
+    public function showLogin(Request $request){
+            // Если есть параметр intended, сохраняем его в сессию
+            if ($request->has('intended')) {
+                session(['url.intended' => $request->intended]);
+            }
         return view('auth.login');
     }
     
@@ -68,7 +72,15 @@ class AuthController extends Controller
             if (Auth::user()->role === 'admin') {
                 return redirect()->route('admin.index');
             }
+             // ВАЖНО: проверяем, есть ли intended URL для редиректа
+            if (session()->has('url.intended')) {
+                return redirect(session('url.intended'));
+            }
             
+            // Проверяем, есть ли параметр intended в запросе (из формы)
+            if ($request->has('intended')) {
+                return redirect($request->intended);
+            }
             return redirect()->route('flats.index')->with('success', 'Успешный вход');
         }
         

@@ -47,9 +47,19 @@ class ProductController extends Controller
     public function show($id)
     {
         // Используйте eager loading для фотографий
-        $flat = Flat::with('photos')->findOrFail($id);
+         $flat = Flat::with(['photos', 'priceHistory'])->findOrFail($id);
+          $similarFlats = Flat::where('id', '!=', $flat->id)           // не эта же квартира
+            ->where('rooms', $flat->rooms)                            // столько же комнат
+            ->where('is_available', true)                              // только доступные
+            ->whereBetween('price', [                                  // цена в диапазоне
+                $flat->price * 0.8,    // от 80% текущей цены
+                $flat->price * 1.2     // до 120% текущей цены
+            ])
+            ->orderBy('price')                                         // сортируем по цене
+            ->limit(3)                                                  // берем 3 квартиры
+            ->get();
         
-        return view('flats.show', compact('flat'));
+        return view('flats.show', compact('flat', 'similarFlats'));
     }
     
     public function storePhoto(Request $request, $id)

@@ -117,4 +117,14 @@
                    @endif
     </div>
     </section> 
+    <section class="buyback-section">
+    <div class="container">
+        <div class="buyback-card">
+            <h2>Передумали? Вернем деньги!</h2>
+            <p>Если в течение 30 дней после покупки вы решите, что квартира вам не подходит, мы выкупим ее обратно</p>
+            <a href="#" class="btn btn-primary">Узнать условия возврата</a>
+        </div>
+    </div>
+</section>
+
 @endsection

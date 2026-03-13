@@ -28,6 +28,9 @@
                 <a href="" class="{{ request()->routeIs('admin.users') ? 'active' : '' }}">
                      Пользователи
                 </a>
+ <a href="{{ route('admin.applications') }}" class="{{ request()->routeIs('admin.index') ? 'active' : '' }}">
+                     зай
+                </a>
                 
                 <div class="sidebar-divider"></div>
                 
