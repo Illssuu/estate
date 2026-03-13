@@ -4,7 +4,7 @@
 @section('header', 'Добавить новую квартиру')
 
 @section('content')
-<div style="max-width: 800px;">
+<div style="max-width: 80%; margin: 0 auto">
     <form action="{{ route('admin.flats.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         
@@ -149,7 +149,14 @@
                 </div>
             </div>
         </div>
-
+        <div class="form-card">
+            <h3>Фотографии квартиры</h3>
+            <div class="form-group">
+                <label>Загрузить фото</label>
+                <input type="file" name="photos[]" multiple accept="image/*" class="form-control">
+                <small class="text-muted">Можно выбрать несколько фото</small>
+            </div>
+        </div>
         <!-- Кнопки -->
         <div class="form-actions">
             <button type="submit" class="btn btn-primary">Сохранить квартиру</button>

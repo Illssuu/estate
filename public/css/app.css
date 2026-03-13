@@ -152,137 +152,6 @@ body {
     border-color: var(--primary-dark);
 }
 
-/* О комплексе */
-.about {
-    padding: 100px 0;
-    background: white;
-}
-
-.about-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 60px;
-    align-items: center;
-}
-
-.about-img {
-    border-radius: var(--border-radius);
-    overflow: hidden;
-    box-shadow: var(--shadow-md);
-    height: 500px;
-    background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-darker) 100%);
-}
-
-.about-img img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    opacity: 0.9;
-    transition: var(--transition);
-}
-
-.about-img:hover img {
-    transform: scale(1.05);
-    opacity: 1;
-}
-
-.about-content h3 {
-    font-size: 2rem;
-    color: var(--primary-dark);
-    margin-bottom: 24px;
-    font-weight: 700;
-}
-
-.about-content p {
-    font-size: 1.1rem;
-    color: #555;
-    line-height: 1.6;
-    margin-bottom: 40px;
-}
-
-.about-stats {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 30px;
-    list-style: none;
-    padding: 0;
-}
-
-.stat-item {
-    text-align: center;
-}
-
-.stat-number {
-    display: block;
-    font-size: 2.5rem;
-    font-weight: 800;
-    color: var(--accent-yellow);
-    margin-bottom: 8px;
-}
-
-.stat-label {
-    color: var(--primary-dark);
-    font-weight: 500;
-    font-size: 1rem;
-    opacity: 0.8;
-}
-
-/* Преимущества */
-.advantages {
-    padding: 100px 0;
-    background: #F8FAF9;
-}
-
-.advantages-cards {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 30px;
-    list-style: none;
-    padding: 0;
-}
-
-.advantage-card {
-    background: white;
-    padding: 40px 30px;
-    border-radius: var(--border-radius);
-    box-shadow: var(--shadow-sm);
-    transition: var(--transition);
-    position: relative;
-    overflow: hidden;
-}
-
-.advantage-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 4px;
-    height: 0;
-    background: var(--accent-yellow);
-    transition: var(--transition);
-}
-
-.advantage-card:hover {
-    transform: translateY(-8px);
-    box-shadow: var(--shadow-md);
-}
-
-.advantage-card:hover::before {
-    height: 100%;
-}
-
-.advantage-card h3 {
-    font-size: 1.4rem;
-    font-weight: 700;
-    color: var(--primary-dark);
-    margin-bottom: 16px;
-}
-
-.advantage-card p {
-    color: #666;
-    line-height: 1.6;
-    margin: 0;
-}
 
 /* Каталог квартир */
 
@@ -375,139 +244,209 @@ body {
 .filter-item:last-child .filter-reset {
     margin-top: 0; /* убираем отступы */
 }
-/* Карточки квартир */
+/* Сетка карточек */
 .flats-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-    gap: 40px;
-    margin-top: 40px;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 24px;
+    margin: 30px 0;
 }
 
+/* Карточка */
 .flat-card {
     background: white;
     border-radius: var(--border-radius);
     overflow: hidden;
-    box-shadow: var(--shadow-sm);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     transition: var(--transition);
-    border: 1px solid #E5E7EB;
+    border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
-.flat-card:hover {
-    transform: translateY(-8px);
-    box-shadow: var(--shadow-md);
-    border-color: var(--accent-yellow);
+
+
+/* Фото */
+.flat-card-image {
+    height: 260px;
+    background-color: #f5f5f5;
+    overflow: hidden;
 }
 
-.flat-card-header {
-    padding: 20px 24px;
-    background: linear-gradient(135deg, var(--primary-dark), var(--primary-darker));
+.flat-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.flat-card:hover .flat-card-image img {
+    transform: scale(1.05);
+}
+
+.no-image {
+    width: 100%;
+    height: 100%;
     display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
+    align-items: center;
+    justify-content: center;
+    background: #f5f5f5;
+    color: #999;
+    font-size: 14px;
 }
 
-.flat-badges {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-}
-
-.badge {
-    padding: 6px 12px;
-    border-radius: 30px;
-    font-size: 0.85rem;
-    font-weight: 600;
-}
-
-.badge-new_building,
-.badge-rooms {
-    background: var(--accent-yellow);
-    color: var(--primary-dark);
-}
-
-.badge-secondary {
-    background: rgba(255, 255, 255, 0.2);
-    color: white;
-}
-
-.badge-feature {
-    background: var(--accent-yellow);
-    color: var(--primary-dark);
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-size: 0.85rem;
-    font-weight: 600;
-}
-
+/* Тело карточки */
 .flat-card-body {
-    padding: 24px;
+    padding: 20px;
 }
 
+/* Тип жилья */
+.flat-type {
+    display: inline-block;
+    background: rgba(26, 59, 46, 0.1);
+    color: var(--primary-dark);
+    font-size: 12px;
+    font-weight: 500;
+    padding: 4px 12px;
+    border-radius: 30px;
+    margin-bottom: 12px;
+    letter-spacing: 0.3px;
+}
+
+/* Заголовок */
 .flat-title {
-    font-size: 1.25rem;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--primary-dark);
+    margin: 0 0 8px 0;
+    line-height: 1.4;
+}
+
+/* Цена */
+.flat-price {
+    font-size: 22px;
     font-weight: 700;
     color: var(--primary-dark);
-    margin-bottom: 16px;
-}
-
-.flat-price {
-    margin-bottom: 20px;
-    padding-bottom: 20px;
-    border-bottom: 1px solid #E5E7EB;
-}
-
-.price-value {
-    display: block;
-    font-size: 1.8rem;
-    font-weight: 800;
-    color: var(--primary-dark);
+    margin-bottom: 12px;
     line-height: 1.2;
 }
 
-.price-meter {
-    font-size: 0.95rem;
-    color: #666;
-}
-
-.flat-specs {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
-    margin-bottom: 20px;
-}
-
-.spec-item {
+/* Характеристики */
+.flat-vertical-features {
     display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    color: var(--primary-darker);
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(26, 59, 46, 0.1);
 }
 
-.spec-label {
-    font-size: 0.85rem;
-    color: #666;
-    margin-bottom: 4px;
-}
-
-.spec-value {
-    font-weight: 600;
+.flat-vertical-features span {
     color: var(--primary-dark);
 }
 
-.flat-description {
-    color: #666;
-    line-height: 1.6;
-    margin-bottom: 20px;
+.dot {
+    opacity: 0.4;
+    font-weight: 300;
+    font-size: 10px;
 }
 
-.flat-card-footer {
-    padding: 0 24px 24px;
-}
-
-.btn-block {
+/* Аккуратная кнопка Подробнее */
+.flat-details-btn {
     display: block;
-    width: 100%;
+    padding: 10px 20px;
+    background: transparent;
+    color: var(--primary-dark);
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
     text-align: center;
+    border-radius: 40px;
+    border: 1.5px solid var(--primary-dark);
+    transition: var(--transition);
+    cursor: pointer;
+    width: 100%;
+    box-sizing: border-box;
+    letter-spacing: 0.3px;
 }
 
+.flat-details-btn:hover {
+    background: var(--primary-dark);
+    color: white;
+}
+
+/* Тип жилья - базовый стиль */
+.flat-type {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 30px;
+    margin-bottom: 12px;
+    letter-spacing: 0.3px;
+}
+
+/* Вторичка */
+.flat-type.secondary {
+    background: #f0f0f0;
+    color: #666;
+}
+
+/* Новостройка - выделяем */
+.flat-type.new-building {
+    background: var(--accent-yellow-bright);
+    color: var(--primary-dark);
+    font-weight: 700;
+}
+
+
+/* Пагинация */
+.pagination-wrapper {
+    margin-top: 40px;
+    display: flex;
+    justify-content: center;
+}
+
+/* Пустой результат */
+.no-results {
+    text-align: center;
+    padding: 60px 20px;
+    background: #f9f9f9;
+    border-radius: var(--border-radius);
+    margin: 30px 0;
+}
+
+.no-results h3 {
+    font-size: 20px;
+    color: var(--primary-dark);
+    margin-bottom: 8px;
+}
+
+.no-results p {
+    color: var(--primary-darker);
+    opacity: 0.7;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .flats-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+    
+    .flat-card-image {
+        height: 180px;
+    }
+    
+    .flat-card-body {
+        padding: 16px;
+    }
+    
+    .flat-price {
+        font-size: 20px;
+    }
+}
 /* Пагинация */
 .pagination-wrapper {
     margin-top: 60px;

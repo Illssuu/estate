@@ -4,7 +4,7 @@
 @section('header', 'Редактировать квартиру')
 
 @section('content')
-<div style="max-width: 800px;">
+<div style="max-width: 80%; margin: 0 auto">
     <form action="{{ route('admin.flats.update', $flat) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
@@ -150,7 +150,47 @@
                 </div>
             </div>
         </div>
-
+         <!-- Существующие фото -->
+    @if($flat->photos->count() > 0)
+    <div class="form-card">
+        <h3>Текущие фотографии</h3>
+        <div class="photos-grid">
+            @foreach($flat->photos as $photo)
+            <div class="photo-item">
+                <img src="{{ Storage::url($photo->image_path) }}" alt="Фото квартиры">
+                
+                <div class="photo-controls">
+                    <!-- Радио для главного фото -->
+                    <label class="radio-label">
+                        <input type="radio" name="main_photo_id" value="{{ $photo->id }}" {{ $photo->is_main ? 'checked' : '' }}>
+                        Главное
+                    </label>
+                    
+                    <!-- Чекбокс для удаления -->
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="delete_photos[]" value="{{ $photo->id }}">
+                        Удалить
+                    </label>
+                    
+                    <!-- Сортировка -->
+                    <div class="sort-control">
+                        <label>Порядок:</label>
+                        <input type="number" name="sort_order[{{ $photo->id }}]" value="{{ $photo->sort_order }}" min="0" class="sort-input">
+                    </div>
+                </div>
+            </div>
+            @endforeach
+        </div>
+    </div>
+    @endif
+    
+    <!-- Загрузка новых фото -->
+    <div class="form-group">
+        <label for="photos">Добавить новые фото</label>
+        <input type="file" name="photos[]" id="photos" multiple accept="image/*">
+        <small>Можно выбрать несколько файлов (jpg, png, svg)</small>
+    </div>
+      
         <!-- Кнопки -->
         <div class="form-actions">
             <button type="submit" class="btn btn-primary">Обновить квартиру</button>

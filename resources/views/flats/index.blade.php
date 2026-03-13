@@ -42,79 +42,55 @@
         </div>
     </div>
 </div>
-        {{-- список квартир --}}
-                    @if($flats->count() > 0)
-                    <div class="flats-grid">
-                        @foreach($flats as $flat)
-                        <div class="flat-card">
-                            <div class="flat-card-header">
-                                <div class="flat-badges">
-                                    <span class="badge badge-{{ $flat->housing_type }}">
-                                        {{ $flat->housing_type == 'new_building' ? 'Новостройка' : 'Вторичка' }}
-                                    </span>
-                                    <span class="badge badge-rooms">{{ $flat->rooms }}-комнатная</span>
-                                </div>
-                                @if($flat->balcony)
-                                    <span class="badge-feature">Балкон</span>
-                                @endif
-                            </div>
-                            
-                            <div class="flat-card-body">
-                                <h3 class="flat-title">{{ $flat->title }}</h3>
-                                
-                                <div class="flat-price">
-                                    <span class="price-value">{{ number_format($flat->price, 0, '.', ' ') }} ₽</span>
-                                    <span class="price-meter">{{ number_format($flat->price / $flat->area, 0, '.', ' ') }} ₽/м²</span>
-                                </div>
-                                
-                                <div class="flat-specs">
-                                    <div class="spec-item">
-                                        <span class="spec-label">Площадь</span>
-                                        <span class="spec-value">{{ $flat->area }} м²</span>
-                                    </div>
-                                    <div class="spec-item">
-                                        <span class="spec-label">Этаж</span>
-                                        <span class="spec-value">{{ $flat->floor }}/{{ $flat->total_floors }}</span>
-                                    </div>
-                                    <div class="spec-item">
-                                        <span class="spec-label">Отделка</span>
-                                        <span class="spec-value">
-                                            @if($flat->finishing == 'rough')
-                                                Черновая
-                                            @elseif($flat->finishing == 'fine')
-                                                Чистовая
-                                            @else
-                                                Дизайнерская
-                                            @endif
-                                        </span>
-                                    </div>
-                                    <div class="spec-item">
-                                        <span class="spec-label">Санузел</span>
-                                        <span class="spec-value">
-                                            {{ $flat->bathroom == 'separate' ? 'Раздельный' : 'Совмещенный' }}
-                                        </span>
-                                    </div>
-                                </div>
-                                
-                                <p class="flat-description">{{ Str::limit($flat->description, 100) }}</p>
-                            </div>
-                            
-                            <div class="flat-card-footer">
-                                <a href="{{ route('flats.show', $flat->id) }}" class="btn btn-outline btn-block">Подробнее</a>
-                            </div>
-                        </div>
-                        @endforeach
-                    </div>
-    
-                    <div class="pagination-wrapper">
-                        {{ $flats->withQueryString()->links() }}
-                    </div>
-                    @else
-                    <div class="no-results">
-                        <h3>Квартиры не найдены</h3>
-                        <p>Попробуйте изменить результаты поиска</p>
-                    </div>
-                   @endif
+
+    @if($flats->count() > 0)
+    <div class="flats-grid">
+        @foreach($flats as $flat)
+        <div class="flat-card">
+            <!-- ФОТОГРАФИИ -->
+            <div class="flat-card-image">
+                @if($flat->photos->first())
+                    <img src="{{ Storage::url($flat->photos->first()->image_path) }}" 
+                         alt="{{ $flat->title }}"
+                         style="max-width: 100%;">
+                @else
+                    <div class="no-image">Нет фото</div>
+                @endif
+            </div>
+            <div class="flat-card-body">
+                <div class="flat-type {{ $flat->housing_type == 'new_building' ? 'new-building' : 'secondary' }}">
+                    {{ $flat->housing_type == 'new_building' ? 'Новостройка' : 'Вторичка' }}
+                </div>
+                
+                <h3 class="flat-title">{{ $flat->rooms }}-комнатная квартира</h3>
+                
+                <div class="flat-price">
+                    {{ number_format($flat->price, 0, '.', ' ') }} ₽
+                </div>
+                
+                <div class="flat-vertical-features">
+                    <span>{{ $flat->rooms }}-комн.</span>
+                    <span class="dot">•</span>
+                    <span>Этаж {{ $flat->floor ?? '2' }}/{{ $floors ?? '13' }}</span>
+                    <span class="dot">•</span>
+                    <span>{{ $flat->area ?? '79' }} м²</span>
+                </div>
+                <a href="{{ route('flats.show', $flat) }}" class=" flat-details-btn">Подробнее</a>
+            </div>
+        </div>
+        @endforeach
     </div>
-    </section> 
+
+    <div class="pagination-wrapper">
+        {{ $flats->withQueryString()->links() }}
+    </div>
+    @else
+    <div class="no-results">
+        <h3>Квартиры не найдены</h3>
+        <p>Попробуйте изменить результаты поиска</p>
+    </div>
+    @endif
+</div>
+
+
 @endsection

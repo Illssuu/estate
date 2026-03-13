@@ -27,7 +27,7 @@
                 <a href="{{ route('admin.flats.create') }}" class="{{ request()->routeIs('admin.flats.create') ? 'active' : '' }}">
                      Добавить квартиру
                 </a>
-                <a href="" class="{{ request()->routeIs('admin.users') ? 'active' : '' }}">
+                <a href="{{ route('admin.users') }}" class="{{ request()->routeIs('admin.users') ? 'active' : '' }}">
                      Пользователи
                 </a>
                 
@@ -44,10 +44,15 @@
                 
                 {{-- Можно добавить хлебные крошки или профиль админа --}}
                 <div class="admin-user">
-                    {{ Auth::user()->name }}
+                 
                     <form method="POST" action="{{ route('logout') }}" style="display: inline;">
                         @csrf
-                        <button type="submit" class="logout-btn">Выйти</button>
+                        <button type="submit" class="logout-btn">
+                            <img src="{{ asset('img/Log out.svg') }}" alt="Выйти" width="20" height="20">
+
+
+        
+                        </button>
                     </form>
                 </div>
             </div>
