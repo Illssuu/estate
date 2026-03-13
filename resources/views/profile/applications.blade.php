@@ -198,6 +198,7 @@
     .btn-primary {
         background: #2c3e50;
         color: white;
+           display: none;
     }
 
     .btn-primary:hover {

@@ -6,7 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Мой сайт')</title>
     <link rel="stylesheet" href="{{asset("css/app.css")}}">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 </head>
 <body>
@@ -27,10 +27,6 @@
                     @endif
                      <li class="nav-item">
                             <a class="nav-link" href="{{ route('profile.index') }}">Личный кабинет</a>
-                        </li>
-                        
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('profile.favorites') }}">Личный кабинет</a>
                         </li>
                 @endauth
             </div>
@@ -60,11 +56,44 @@
     </main>
 
     <!-- Footer -->
-    <footer class="footer">
-        <div class="container text-center">
-            <p>&copy; {{ date('Y') }} MyShop. Все права защищены.</p>
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+          <div class="footer-col-wrapper">
+                <div class="footer-col">
+                <h4>О компании</h4>
+                <p>Строительная компания "Estate" — надёжный застройщик с 2010 года. Все объекты сданы в срок.</p>
+            </div>
+          </div>
+            
+          <div class="footer-col-wrapper">
+                <div class="footer-col">
+                <h4>Информация</h4>
+                <ul>
+                    <li><a href="/about">О ЖК</a></li>
+                    <li><a href="/flats">Квартиры</a></li>
+                    <li><a href="/contacts">Контакты</a></li>
+                </ul>
+            </div>
+          </div>
+            
+          <div class="footer-col-wrapper">
+                <div class="footer-col">
+                <h4>Контакты</h4>
+                <ul>
+                    <li>Казань, ул. Центральная, 1</li>
+                    <li>+7 (843) 123-45-67</li>
+                    <li>info@complex.ru</li>
+                </ul>
+            </div>
+          </div>
         </div>
-    </footer>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2024 Жилой комплекс "Estate". Все права защищены.</p>
+        </div>
+    </div>
+</footer>
 
     
 </body>
