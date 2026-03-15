@@ -414,6 +414,18 @@
 .card-caption{
 display: none;
 }
+
+.location-map {
+    width: 100%;        /* Занимает всю ширину своей колонки */
+    height: 500px;      /* Фиксированная высота, подберите под свой дизайн */
+    border-radius: 20px; /* Если нужны скругленные углы, как у картинки */
+    overflow: hidden;   /* Чтобы карта не вылезала за скругленные углы */
+}
+
+#map {
+    width: 100%;
+    height: 100%;
+}
 </style>
 
 <div class="about-page">
@@ -508,8 +520,8 @@ display: none;
             </div>
             
             <!-- Правая колонка с картинкой -->
-            <div class="location-image">
-                <img src="{{ asset('img/location.svg') }}" alt="Расположение ЖК на карте">
+             <div class="location-map">
+                <div id="map"></div>
             </div>
         </div>
         
@@ -642,4 +654,82 @@ display: none;
     </section>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+// Подождем, пока загрузится DOM
+document.addEventListener('DOMContentLoaded', function() {
+    // Проверяем, есть ли на странице контейнер карты
+    if (!document.getElementById('map')) return;
+    
+    // Функция инициализации карты
+    function initMap() {
+        // Координаты центра (например, центр Казани)
+        const center = [49.1056, 55.7963]; // [долгота, широта]
+        
+        // Создаем карту
+        const map = new ymaps3.YMap(document.getElementById('map'), {
+            location: {
+                center: center,
+                zoom: 13, // Подберите масштаб, чтобы были видны все точки
+                bounds: { // Ограничиваем область (опционально)
+                    southWest: [49.0, 55.75],
+                    northEast: [49.2, 55.85]
+                }
+            }
+        });
+
+        // Добавляем слой карты
+        map.addChild(new ymaps3.YMapDefaultSchemeLayer());
+        map.addChild(new ymaps3.YMapDefaultFeaturesLayer());
+
+        // СОЗДАЕМ МАРКЕРЫ ДЛЯ ВСЕХ ВАШИХ ЛОКАЦИЙ
+        const locations = [
+            { text: "Кинотеатр Мир", coords: [49.147332, 55.788080] },
+            { text: "Набережная озера Кабан", coords: [49.1178, 55.7821] },
+            { text: "Парк Горького", coords: [49.1225, 55.7808] },
+            { text: "Парк Урам", coords: [49.1315, 55.8105] },
+            { text: "ТЦ Арт-Центр", coords: [49.1219, 55.8112] },
+            { text: "Международная школа Unischool", coords: [49.0892, 55.7701] }
+        ];
+        
+        // ВАЖНО: Вам нужно найти точные координаты для каждого места!
+        // Как это сделать, написано ниже ⬇️
+
+        // Добавляем маркеры
+        locations.forEach(location => {
+            // Создаем красивый маркер
+            const markerElement = document.createElement('div');
+            markerElement.className = 'custom-marker';
+            
+            // Можно использовать иконку или цифру
+            markerElement.innerHTML = `
+                <div style="
+                    background-color: #ff6b6b;
+                    color: white;
+                    width: 36px;
+                    height: 36px;
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-weight: bold;
+                    border: 3px solid white;
+                    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+                ">
+                    ${location.text.match(/\d+/)?.[0] || '•'}
+                </div>
+            `;
+            
+            // Добавляем маркер на карту
+            map.addChild(new ymaps3.YMapMarker({
+                coordinates: location.coords,
+            }, markerElement));
+        });
+    }
+
+    // Подключаем API Яндекс Карт
+    const script = document.createElement('script');
+    
+    document.head.appendChild(script);
+});
+</script>
 @endsection

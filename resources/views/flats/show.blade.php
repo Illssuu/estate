@@ -3,16 +3,12 @@
 @section('title', $flat->title . ' - Квартира в продаже')
 @section('content')
 <div class="flat-detail-page">
-    <!-- Хлебные крошки -->
-    <div class="container py-3">
-        <nav aria-label="breadcrumb">
+    <div class="container_show" style=" max-width: 1200px;  margin: 0 auto;">
+          <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('flats.index') }}">Квартиры</a></li>
             </ol>
         </nav>
-    </div>
-
-    <div class="container">
         <div class="row">
             <!-- Основная информация -->
             <div class="col-lg-8">
@@ -190,7 +186,7 @@
                         <!-- Цена и избранное -->
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <div>
-                                <h3 class="text-primary mb-0">{{ number_format($flat->price, 0, ',', ' ') }} ₽</h3>
+                                <h3 class=" text-primary mb-0" >{{ number_format($flat->price, 0, ',', ' ') }} ₽</h3>
                             </div>
                            <!-- избранное -->
 @auth
@@ -542,10 +538,7 @@
     box-sizing: border-box;
 }
 
-.form-control:focus {
-    outline: none;
-    border-color: #2c3e50;
-}
+
 
 .btn {
     padding: 10px 20px;
@@ -557,12 +550,12 @@
 }
 
 .btn-primary {
-    background: #2c3e50;
+    background: #1a3b2e;
     color: white;
 }
 
 .btn-primary:hover {
-    background: #1e2b37;
+    background: #122f23ff;
 }
 
 .btn-secondary {
@@ -583,6 +576,15 @@
         width: 100%;
     }
 }
+btn-primary.active,
+.btn-primary:focus:active,
+.price-history-section .btn:active,
+.d-grid .btn:active,
+button.btn-primary:active {
+    background: #0f2b21; /* темно-зеленый при нажатии */
+
+}
+
 </style>
 
 <!-- ПОДКЛЮЧЕНИЕ БИБЛИОТЕК -->
@@ -676,6 +678,7 @@ function togglePriceHistory() {
         toggleIcon.classList.add('bi-chevron-down');
         toggleBtn.innerHTML = '<span><i class="bi bi-graph-up me-2"></i>Показать историю цен</span><i class="bi bi-chevron-down toggle-icon"></i>';
     }
+    
 }
 
 // Функция для открытия модального окна
@@ -699,5 +702,60 @@ window.onclick = function(event) {
         modal.style.display = 'none';
     }
 }
+
+function toggleFavorite(flatId) {
+    @auth
+    fetch(`/profile/favorites/toggle/${flatId}`, {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // ТОЛЬКО ЭТУ СТРОКУ ИСПРАВИЛ
+            const btn = document.querySelector(`.favorite-link[data-flat-id="${flatId}"]`);
+            
+            if (data.added) {
+                btn.classList.add('active');
+                showNotification('Добавлено в избранное');
+            } else {
+                btn.classList.remove('active');
+                showNotification('Удалено из избранного');
+            }
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+    @endauth
+}
+
+// Простое уведомление (опционально)
+function showNotification(message) {
+    const notification = document.createElement('div');
+    notification.className = 'notification';
+    notification.textContent = message;
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: #2c3e50;
+        color: white;
+        padding: 12px 24px;
+        border-radius: 8px;
+        z-index: 9999;
+        animation: slideIn 0.3s ease;
+    `;
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.remove();
+    }, 2000);
+}
+
 </script>
 @endsection

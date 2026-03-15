@@ -31,7 +31,7 @@
                      Пользователи
                 </a>
  <a href="{{ route('admin.applications') }}" class="{{ request()->routeIs('admin.index') ? 'active' : '' }}">
-                     зай
+                    Заявки
                 </a>
                 
                 <div class="sidebar-divider"></div>

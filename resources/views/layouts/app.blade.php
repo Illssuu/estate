@@ -57,37 +57,7 @@
 
     <!-- Footer -->
 <footer class="footer">
-    <div class="container">
-        <div class="footer-content">
-          <div class="footer-col-wrapper">
-                <div class="footer-col">
-                <h4>О компании</h4>
-                <p>Строительная компания "Estate" — надёжный застройщик с 2010 года. Все объекты сданы в срок.</p>
-            </div>
-          </div>
-            
-          <div class="footer-col-wrapper">
-                <div class="footer-col">
-                <h4>Информация</h4>
-                <ul>
-                    <li><a href="/about">О ЖК</a></li>
-                    <li><a href="/flats">Квартиры</a></li>
-                    <li><a href="/contacts">Контакты</a></li>
-                </ul>
-            </div>
-          </div>
-            
-          <div class="footer-col-wrapper">
-                <div class="footer-col">
-                <h4>Контакты</h4>
-                <ul>
-                    <li>Казань, ул. Центральная, 1</li>
-                    <li>+7 (843) 123-45-67</li>
-                    <li>info@complex.ru</li>
-                </ul>
-            </div>
-          </div>
-        </div>
+ 
         
         <div class="footer-bottom">
             <p>&copy; 2024 Жилой комплекс "Estate". Все права защищены.</p>

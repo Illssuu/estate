@@ -161,4 +161,97 @@ public function destroyUser(User $user)
     
     return back()->with('success', 'Пользователь удален');
 }
+  public function updateFlat(Request $request, Flat $flat)
+    {
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'price' => 'required|numeric|min:0',
+            'area' => 'required|numeric|min:0',
+            'living_area' => 'nullable|numeric|min:0',
+            'rooms' => 'required|integer|min:1',
+            'floor' => 'required|integer|min:1',
+            'total_floors' => 'required|integer|min:1',
+            'housing_type' => 'required|in:new_building,secondary',
+            'finishing' => 'required|in:rough,fine,euro,without',
+            'view_type' => 'required|in:yard,street,combined',
+            'bathroom' => 'required|in:separate,combined',
+            'balcony' => 'required|boolean',
+            'status' => 'required|in:available,reserved,sold',
+            'is_available' => 'required|boolean',
+            'main_photo_id' => 'nullable|exists:flat_photos,id',
+            'delete_photos' => 'nullable|array',
+            'delete_photos.*' => 'exists:flat_photos,id',
+            'sort_order' => 'nullable|array',
+            'sort_order.*' => 'integer|min:0',
+            'photos' => 'nullable|array',
+            'photos.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+        ]);
+
+        // Обновляем основные данные
+        $flat->update($validated);
+
+        // Удаление отмеченных фото
+        if ($request->has('delete_photos')) {
+            foreach ($request->delete_photos as $photoId) {
+                $photo = FlatPhoto::find($photoId);
+                if ($photo) {
+                    // Удаляем файл
+                    Storage::disk('public')->delete($photo->image_path);
+                    // Удаляем запись
+                    $photo->delete();
+                }
+            }
+        }
+
+        // Обновление порядка сортировки
+        if ($request->has('sort_order')) {
+            foreach ($request->sort_order as $photoId => $sortOrder) {
+                FlatPhoto::where('id', $photoId)
+                    ->where('flat_id', $flat->id)
+                    ->update(['sort_order' => $sortOrder]);
+            }
+        }
+
+        // Установка главного фото
+        if ($request->has('main_photo_id')) {
+            // Сбрасываем флаг is_main у всех фото квартиры
+            FlatPhoto::where('flat_id', $flat->id)
+                ->update(['is_main' => false]);
+            
+            // Устанавливаем новое главное фото
+            FlatPhoto::where('id', $request->main_photo_id)
+                ->where('flat_id', $flat->id)
+                ->update(['is_main' => true]);
+        }
+
+        // Загрузка новых фото
+        if ($request->hasFile('photos')) {
+            $maxSortOrder = FlatPhoto::where('flat_id', $flat->id)->max('sort_order') ?? 0;
+            
+            foreach ($request->file('photos') as $index => $file) {
+                $path = $file->store('flats/' . $flat->id, 'public');
+                
+                FlatPhoto::create([
+                    'flat_id' => $flat->id,
+                    'image_path' => $path,
+                    'image_name' => $file->getClientOriginalName(),
+                    'sort_order' => $maxSortOrder + $index + 1,
+                    'is_main' => false // Новые фото не главные по умолчанию
+                ]);
+            }
+        }
+
+        // Если после всех операций нет главного фото, назначаем первое
+        if (!FlatPhoto::where('flat_id', $flat->id)->where('is_main', true)->exists()) {
+            $firstPhoto = FlatPhoto::where('flat_id', $flat->id)->orderBy('sort_order')->first();
+            if ($firstPhoto) {
+                $firstPhoto->update(['is_main' => true]);
+            }
+        }
+
+        return redirect()->route('admin.flats.index')
+            ->with('success', 'Квартира успешно обновлена');
+    }
+    
 }

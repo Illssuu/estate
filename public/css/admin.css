@@ -687,3 +687,20 @@ textarea.form-control {
     display: flex;
     justify-content: center;
 }
+/* Пагинация зеленым цветом (без !important) */
+.pagination .page-link {
+    color: #1a3b2e;
+    border-color: #dee2e6;
+}
+
+.pagination .page-link:hover {
+    background-color: #e9ecef;
+    color: #0f2b21;
+    border-color: #1a3b2e;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #1a3b2e;
+    border-color: #1a3b2e;
+    color: white;
+}

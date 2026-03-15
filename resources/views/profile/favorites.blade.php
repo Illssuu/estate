@@ -172,7 +172,7 @@ function toggleFavorite(flatId) {
 }
 
 .badge-new_building {
-    background: #2c3e50;
+    background: #1A3B2E;
     color: white;
 }
 
@@ -268,13 +268,16 @@ function toggleFavorite(flatId) {
 }
 
 .btn-primary {
-    background: #2c3e50;
+    background: #1A3B2E;
     color: white;
     flex: 2;
 }
 
 .btn-primary:hover {
-    background: #1e2b37;
+    background: #123326ff;
+}
+.btn-primary:focus {
+    background: #02311eff;
 }
 
 .btn-remove {
@@ -389,6 +392,14 @@ function toggleFavorite(flatId) {
     .favorite-card-header {
         justify-content: center;
     }
+}
+btn-primary.active,
+.btn-primary:focus:active,
+.price-history-section .btn:active,
+.d-grid .btn:active,
+button.btn-primary:active {
+    background: #0f2b21; /* темно-зеленый при нажатии */
+
 }
 </style>
 @endsection

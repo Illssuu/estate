@@ -41,7 +41,7 @@
         <div class="recent-section">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h2 class="h4">Последние заявки</h2>
-                <a href="{{ route('profile.applications') }}" class="btn btn-outline-primary btn-sm">Все заявки</a>
+                <a href="{{ route('profile.applications') }}" class="btn btn-outline-primary btn-sm" style="background: #1A3B2E; color: white; border: none; padding: 10px 20px;">Все заявки</a>
             </div>
 
             @if($recentApplications->count() > 0)
@@ -91,7 +91,7 @@
             @else
                 <div class="empty-state">
                     <p>У вас пока нет заявок</p>
-                    <a href="{{ route('flats.index') }}" class="btn btn-primary">Выбрать квартиру</a>
+                    <a href="{{ route('flats.index') }}" class="btn btn-primary"  style="background: #1A3B2E; color: white; border: none; padding: 10px 20px;" >Выбрать квартиру</a>
                 </div>
             @endif
         </div>

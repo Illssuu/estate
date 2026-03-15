@@ -81,9 +81,9 @@
         @endforeach
     </div>
 
-    <div class="pagination-wrapper">
-        {{ $flats->withQueryString()->links() }}
-    </div>
+<div class="d-flex justify-content-center mt-4">
+    {{ $flats->withQueryString()->links('pagination::bootstrap-4') }}
+</div>
     @else
     <div class="no-results">
         <h3>Квартиры не найдены</h3>

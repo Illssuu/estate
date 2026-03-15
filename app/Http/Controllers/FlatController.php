@@ -10,17 +10,31 @@ use Illuminate\Support\Facades\Storage; // УЖЕ ЕСТЬ
 
 class FlatController extends Controller
 {
-    // СПИСОК всех квартир
-// Controller (app/Http/Controllers/FlatController.php)
+
 public function index(Request $request)
 {
+    // СОЗДАЕМ ЗАПРОС
+    $query = Flat::query();
+
+    // ПОИСК ПО НАЗВАНИЮ (должен быть ДО сортировки)
+    if ($request->filled('search')) {
+        $search = $request->search;
+        $query->where('title', 'LIKE', "%{$search}%");
+    }
+
+    // СОРТИРОВКА
     $sort = $request->get('sort', 'id');
     $order = $request->get('order', 'desc');
     
-    $flats = Flat::orderBy($sort, $order)->paginate(10);
+    // Применяем сортировку к запросу
+    $query->orderBy($sort, $order);
     
+    // ПОЛУЧАЕМ РЕЗУЛЬТАТ
+    $flats = $query->paginate(10);
+
     return view('admin.flats.index', compact('flats', 'sort', 'order'));
 }
+    
     // ФОРМА создания новой квартиры
     public function create()
     {

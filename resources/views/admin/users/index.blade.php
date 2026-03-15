@@ -34,7 +34,7 @@
                 <th>Телефон</th>
                 <th>Роль</th>
                 <th>Дата</th>
-                <th>Действия</th>
+            
             </tr>
         </thead>
         <tbody>
@@ -55,13 +55,7 @@
                     </form>
                 </td>
                 <td>{{ $user->created_at->format('d.m.Y') }}</td>
-                <td class="actions">
-                    <form action="{{ route('admin.users.destroy', $user) }}" method="POST" class="delete-form" onsubmit="return confirm('Точно удалить пользователя?')">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn-delete">Удалить</button>
-                    </form>
-                </td>
+              
             </tr>
             @endforeach
         </tbody>

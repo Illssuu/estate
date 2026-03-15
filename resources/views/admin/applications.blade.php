@@ -45,16 +45,11 @@
                                 <form action="{{ route(isset($app->contract_number) ? 'admin.buyback.status' : 'admin.application.status', $app->id) }}" method="POST" class="d-inline">
                                     @csrf
                                     <select name="status" class="form-select form-select-sm" style="width: 140px;" onchange="this.form.submit()">
-                                        @if(isset($app->contract_number))
-                                            <option value="pending" {{ $app->status == 'pending' ? 'selected' : '' }}>На проверке</option>
-                                            <option value="verified" {{ $app->status == 'verified' ? 'selected' : '' }}>Одобрено</option>
-                                            <option value="rejected" {{ $app->status == 'rejected' ? 'selected' : '' }}>Отклонено</option>
-                                            <option value="completed" {{ $app->status == 'completed' ? 'selected' : '' }}>Завершено</option>
-                                        @else
+                                       
                                             <option value="new" {{ $app->status == 'new' ? 'selected' : '' }}>Новая</option>
                                             <option value="processed" {{ $app->status == 'processed' ? 'selected' : '' }}>Обработана</option>
                                             <option value="called" {{ $app->status == 'called' ? 'selected' : '' }}>Перезвонили</option>
-                                        @endif
+
                                     </select>
                                 </form>
                             </td>
@@ -109,9 +104,8 @@
 }
 
 .form-select-sm:focus {
-    border-color: #80bdff;
+    border-color: #80ffbd;
     outline: 0;
-    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
 }
 
 .btn-sm {
@@ -119,16 +113,6 @@
     font-size: 13px;
 }
 
-.btn-primary {
-    background-color: #007bff;
-    border-color: #007bff;
-    color: white;
-    text-decoration: none;
-}
 
-.btn-primary:hover {
-    background-color: #0069d9;
-    border-color: #0062cc;
-}
 </style>
 @endsection
