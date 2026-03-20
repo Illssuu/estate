@@ -51,6 +51,10 @@ class User extends Authenticatable
     public function favorites() {
         return $this->belongsToMany(Flat::class, 'favorites')->withTimestamps();
     }
+     public function appointments()
+    {
+        return $this->hasMany(Appointment::class);
+    }
 
     public function applications() {
         return $this->HasMany(Application::class);

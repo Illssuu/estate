@@ -30,10 +30,12 @@
                 <a href="{{ route('admin.users') }}" class="{{ request()->routeIs('admin.users') ? 'active' : '' }}">
                      Пользователи
                 </a>
- <a href="{{ route('admin.applications') }}" class="{{ request()->routeIs('admin.index') ? 'active' : '' }}">
+                <a href="{{ route('admin.applications') }}" class="{{ request()->routeIs('admin.index') ? 'active' : '' }}">
                     Заявки
                 </a>
-                
+                <a href="{{ route('admin.calendar') }}" class="admin-menu-link">
+                    Календарь
+                </a>
                 <div class="sidebar-divider"></div>
                 
 

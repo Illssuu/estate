@@ -9,7 +9,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\BuybackController;
-
+use App\Http\Controllers\AppointmentController;
 // Главная страница с квартирами
 Route::get('/', [ProductController::class, 'index'])->name('flats.index');
 
@@ -62,10 +62,9 @@ Route::get('/flats/{id}', [ProductController::class, 'show'])->name('flats.show'
 Route::get('/flats', [ProductController::class, 'index'])->name('flats.index');
 
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
-    
-// routes/web.php
 
-   
+
+    Route::get('/calendar', [AdminController::class, 'calendar'])->name('calendar');
   Route::get('/', [AdminController::class, 'index'])->name('index');
         
   Route::resource('flats', FlatController::class);
@@ -94,3 +93,20 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::delete('/application/{id}', [AdminController::class, 'destroyApplication'])->name('application.destroy');
     Route::delete('/buyback/{id}', [AdminController::class, 'destroyBuyback'])->name('buyback.destroy');
 });
+
+////////////////////
+
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/appointments/slots', [AppointmentController::class, 'getAvailableSlots'])->name('appointments.slots');
+    Route::post('/appointments', [AppointmentController::class, 'store'])->name('appointments.store');
+    Route::delete('/appointments/{appointment}', [AppointmentController::class, 'cancel'])->name('appointments.cancel');
+});
+Route::middleware(['auth'])->group(function () {
+    // ... другие маршруты
+    Route::get('/profile/appointments', [ProfileController::class, 'appointments'])->name('profile.appointments');
+});
+
+
+// php artisan schedule:work
+// php artisan appointments:send-reminder

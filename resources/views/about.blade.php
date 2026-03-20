@@ -653,83 +653,152 @@ display: none;
         </div>
     </section>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Подключаем CSS и JS Leaflet -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
 <script>
-// Подождем, пока загрузится DOM
 document.addEventListener('DOMContentLoaded', function() {
-    // Проверяем, есть ли на странице контейнер карты
     if (!document.getElementById('map')) return;
     
-    // Функция инициализации карты
-    function initMap() {
-        // Координаты центра (например, центр Казани)
-        const center = [49.1056, 55.7963]; // [долгота, широта]
+      // Создаем карту
+    const map = L.map('map', {
+        attributionControl: false, // Скрываем надпись Leaflet | © CartoDB
+        zoomControl: false         // Скрываем кнопки +/-
+    });
+    // Добавляем красивый слой (светлая тема)
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+        attribution: '© CartoDB'
+    }).addTo(map);
+    
+    // Координаты углов ЖК Академик
+    const jkPolygon = [
+        [55.788513, 49.143847],
+        [55.788575, 49.144021],
+        [55.788405, 49.145999],
+        [55.788442, 49.146013],
+        [55.788384, 49.146664],
+        [55.788135, 49.146811],
+        [55.787964, 49.146772],
+        [55.787996, 49.146381],
+        [55.787790, 49.146313],
+        [55.787843, 49.145806],
+        [55.787833, 49.145730],
+        [55.787894, 49.145178],
+        [55.788059, 49.145228],
+        [55.788123, 49.144542],
+        [55.788326, 49.143861]
+    ];
+    
+    // Рисуем точный контур здания
+    L.polygon(jkPolygon, {
+        color: "#c9a27e",
+        weight: 3,
+        fillColor: "#c9a27e",
+        fillOpacity: 0.6
+    }).addTo(map).bindPopup("ЖК Академик");
+    
+    // другие
+    const extraBuilding1 = [
+        [55.788205, 49.147259],
+        [55.788207, 49.147248],
+        [55.788266, 49.147264],
+        [55.788243, 49.147530],
+        [55.787900, 49.147423],
+        [55.787900, 49.147423],
+        [55.787923, 49.147173]
         
-        // Создаем карту
-        const map = new ymaps3.YMap(document.getElementById('map'), {
-            location: {
-                center: center,
-                zoom: 13, // Подберите масштаб, чтобы были видны все точки
-                bounds: { // Ограничиваем область (опционально)
-                    southWest: [49.0, 55.75],
-                    northEast: [49.2, 55.85]
-                }
-            }
-        });
-
-        // Добавляем слой карты
-        map.addChild(new ymaps3.YMapDefaultSchemeLayer());
-        map.addChild(new ymaps3.YMapDefaultFeaturesLayer());
-
-        // СОЗДАЕМ МАРКЕРЫ ДЛЯ ВСЕХ ВАШИХ ЛОКАЦИЙ
-        const locations = [
-            { text: "Кинотеатр Мир", coords: [49.147332, 55.788080] },
-            { text: "Набережная озера Кабан", coords: [49.1178, 55.7821] },
-            { text: "Парк Горького", coords: [49.1225, 55.7808] },
-            { text: "Парк Урам", coords: [49.1315, 55.8105] },
-            { text: "ТЦ Арт-Центр", coords: [49.1219, 55.8112] },
-            { text: "Международная школа Unischool", coords: [49.0892, 55.7701] }
-        ];
+    ];
+    // Рисуем дополнительное здание (цвет чуть темнее)
+    L.polygon(extraBuilding1, {
+        color: "#7b5141", 
+        weight: 3,
+        fillColor: "#7b5141",
+        fillOpacity: 0.7
+    }).addTo(map).bindPopup();
+    // другие
+    const extraBuilding2 = [
+        [55.789754, 49.147449],
+        [55.789699, 49.148108],
+        [55.789326, 49.148008],
+        [55.789329, 49.147983],
+        [55.789214, 49.1479513],
+        [55.789215, 49.147943],
+        [55.789169, 49.147927],
+        [55.789175, 49.147861],
+        [55.789283, 49.147887],
+        [55.789291, 49.147808],
+        [55.789159, 49.147773],
+        [55.789185, 49.147484],
+        [55.789362, 49.147529]
         
-        // ВАЖНО: Вам нужно найти точные координаты для каждого места!
-        // Как это сделать, написано ниже ⬇️
+    ];
+    // Рисуем дополнительное здание (цвет чуть темнее)
+    L.polygon(extraBuilding2, {
+        color: "#7b5141", 
+        weight: 3,
+        fillColor: "#7b5141",
+        fillOpacity: 0.7
+    }).addTo(map).bindPopup();
 
-        // Добавляем маркеры
-        locations.forEach(location => {
-            // Создаем красивый маркер
-            const markerElement = document.createElement('div');
-            markerElement.className = 'custom-marker';
-            
-            // Можно использовать иконку или цифру
-            markerElement.innerHTML = `
-                <div style="
-                    background-color: #ff6b6b;
-                    color: white;
-                    width: 36px;
-                    height: 36px;
-                    border-radius: 50%;
+
+
+
+
+
+    // Центр для иконки
+    const sumLat = jkPolygon.reduce((sum, point) => sum + point[0], 0);
+    const sumLng = jkPolygon.reduce((sum, point) => sum + point[1], 0);
+    const centerLat = sumLat / jkPolygon.length;
+    const centerLng = sumLng / jkPolygon.length;
+    
+    // ТВОИ ЛОКАЦИИ с цифрами (добавляем номерки)
+    const locations = [
+        { name: "Кинотеатр Мир", coords: [55.788080, 49.147332], number: "1" },
+        { name: "Сквер им. Аксёнова", coords: [55.787351, 49.147314], number: "2" },
+        { name: "Сквер Казанские наличники", coords: [55.789139, 49.144084], number: "3" },
+        { name: "Чеховский рынок", coords: [55.788991, 49.147570], number: "4" }
+    ];
+    
+    // Массив для всех маркеров
+    const markers = [];
+    
+    // Добавляем маркеры локаций в виде черных цифр на бежевом овале
+    locations.forEach(loc => {
+        const marker = L.marker(loc.coords, {
+            icon: L.divIcon({
+                className: 'custom-marker',
+                html: `<div style="
+                    background-color: #c9a27e;
+                    width: 25px;
+                    height: 25px;
+                    border-radius: 18px;
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    font-weight: bold;
-                    border: 3px solid white;
-                    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-                ">
-                    ${location.text.match(/\d+/)?.[0] || '•'}
-                </div>
-            `;
-            
-            // Добавляем маркер на карту
-            map.addChild(new ymaps3.YMapMarker({
-                coordinates: location.coords,
-            }, markerElement));
-        });
-    }
-
-    // Подключаем API Яндекс Карт
-    const script = document.createElement('script');
+                    padding: 0 8px;
+                    font-weight: 400;
+                    color: #000000;
+                    font-size: 12px;
+                ">${loc.number}</div>`,
+                iconSize: [36, 36],
+                iconAnchor: [18, 18]
+            })
+        }).addTo(map);
+        
+        marker.bindPopup(`<b>${loc.name}</b>`);
+        markers.push(marker);
+    });
     
-    document.head.appendChild(script);
+    // Добавляем виртуальные маркеры для углов полигона
+    jkPolygon.forEach(coord => {
+        markers.push(L.marker(coord));
+    });
+    
+    // АВТОПОДБОР ГРАНИЦ
+    const group = L.featureGroup(markers);
+    map.fitBounds(group.getBounds().pad(0.2));
 });
 </script>
 @endsection

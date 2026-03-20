@@ -1,14 +1,16 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\Appointment;
 use App\Http\Controllers\Controller;
 use App\Models\Flat;
 use App\Models\User;
 use App\Models\CallRequest; 
 use App\Models\Application;
 use App\Models\BuybackRequest;
-use Illuminate\Http\Request; 
+use Illuminate\Http\Request;
+
+use Carbon\Carbon;  
 
 class AdminController extends Controller
 {
@@ -252,6 +254,41 @@ public function destroyUser(User $user)
 
         return redirect()->route('admin.flats.index')
             ->with('success', 'Квартира успешно обновлена');
+    }
+
+    public function calendar(Request $request)
+    {
+        $date = $request->get('date', Carbon::today()->format('Y-m-d'));
+        
+        // Получаем все активные записи на выбранную дату
+        $appointments = Appointment::where('date', $date)
+            ->where('status', 'active')
+            ->with(['user', 'flat'])
+            ->orderBy('time')
+            ->get();
+        
+        // Группируем по времени
+        $slots = [];
+        foreach ($appointments as $appointment) {
+            $time = Carbon::parse($appointment->time)->format('H:i');
+            $slots[$time] = [
+                'time' => $time,
+                'name' => $appointment->user->name,
+                'flat_title' => $appointment->flat->title,
+                'flat_id' => $appointment->flat_id,
+                'phone' => $appointment->user->phone ?? 'не указан',
+                'comment' => $appointment->comment
+            ];
+        }
+        
+        // Все возможные слоты (10:00-17:00)
+        $allSlots = [];
+        for ($hour = 10; $hour <= 17; $hour++) {
+            $time = sprintf('%02d:00', $hour);
+            $allSlots[$time] = isset($slots[$time]) ? $slots[$time] : null;
+        }
+        
+        return view('admin.calendar', compact('allSlots', 'date'));
     }
     
 }

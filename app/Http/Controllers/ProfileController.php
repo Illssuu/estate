@@ -41,10 +41,11 @@ class ProfileController extends Controller
     $recentApplications = $regularApplications->concat($buybackRequests)
         ->sortByDesc('created_at')
         ->take(5);
-    
+   $appointmentsCount = $user->appointments()->where('status', 'active')->count();
     return view('profile.index', compact(
         'favoritesCount',
         'applicationCount',
+        'appointmentsCount',
         'recentApplications'
     ));
 }
@@ -177,4 +178,14 @@ public function applications(Request $request)
 
         return back()->with('success', 'Пароль успешно изменён');
     }
+    public function appointments()
+{
+    $appointments = auth()->user()->appointments()
+        ->with('flat')
+        ->orderBy('date', 'desc')
+        ->orderBy('time', 'desc')
+        ->paginate(10);
+    
+    return view('profile.appointments', compact('appointments'));
+}
 }

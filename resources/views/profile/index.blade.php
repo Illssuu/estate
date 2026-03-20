@@ -7,7 +7,7 @@
 
         <div class="profile-header mb-4">
             <h1 class="h2 mb-2">Здравствуйте, {{ auth()->user()->name }}!</h1>
-            <p>Рады видеть вас снова. Здесь вы можете управлять своими заявками и избранным.</p>
+            <p>Рады видеть вас снова. Здесь вы можете управлять своими заявками, записями на просмотр и избранным.</p>
         </div>
 
         <!-- Статистика -->
@@ -26,6 +26,14 @@
                     <span class="stat-label">заявок</span>
                 </div>
                 <a href="{{ route('profile.applications') }}" class="stat-link">Перейти →</a>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-content">
+                    <span class="stat-number">{{ $appointmentsCount }}</span>
+                    <span class="stat-label">просмотров</span>
+                </div>
+                <a href="{{ route('profile.appointments') }}" class="stat-link">Перейти →</a>
             </div>
 
             <div class="stat-card">
@@ -70,28 +78,28 @@
                                     @endif
                                 </div>
                             </div>
-                     <div class="application-status">
-    @switch($application->status)
-        @case('new')
-            <span class="status status-new">Новая</span>
-            @break
-        @case('processed')
-            <span class="status status-processed">Обработана</span>
-            @break
-        @case('called')
-            <span class="status status-called">Перезвонили</span>
-            @break
-        @default
-            <span class="status status-new">{{ $application->status }}</span>
-    @endswitch
-</div>
+                            <div class="application-status">
+                                @switch($application->status)
+                                    @case('new')
+                                        <span class="status status-new">Новая</span>
+                                        @break
+                                    @case('processed')
+                                        <span class="status status-processed">Обработана</span>
+                                        @break
+                                    @case('called')
+                                        <span class="status status-called">Перезвонили</span>
+                                        @break
+                                    @default
+                                        <span class="status status-new">{{ $application->status }}</span>
+                                @endswitch
+                            </div>
                         </div>
                     @endforeach
                 </div>
             @else
                 <div class="empty-state">
                     <p>У вас пока нет заявок</p>
-                    <a href="{{ route('flats.index') }}" class="btn btn-primary"  style="background: #1A3B2E; color: white; border: none; padding: 10px 20px;" >Выбрать квартиру</a>
+                    <a href="{{ route('flats.index') }}" class="btn btn-primary" style="background: #1A3B2E; color: white; border: none; padding: 10px 20px;">Выбрать квартиру</a>
                 </div>
             @endif
         </div>
@@ -99,14 +107,19 @@
 </div>
 
 <style>
-/* Все ваши стили остаются без изменений */
 .profile-page {
     padding: 40px 0 60px;
 }
 
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
 .stats-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 25px;
 }
 
@@ -256,7 +269,6 @@
     color: #0f5132;
 }
 
-/* Новые статусы для заявок на возврат */
 .status-pending {
     background: #fff3cd;
     color: #997404;
@@ -288,6 +300,12 @@
     color: #6c757d;
     margin-bottom: 20px;
     font-size: 16px;
+}
+
+@media (max-width: 992px) {
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
 @media (max-width: 768px) {
